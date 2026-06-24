@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
+use App\Models\User;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -20,21 +22,41 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'month' => 'required|string',
-            'amount' => 'required|numeric',
+            'room_number' => 'required|string',
+            'start_month' => 'required|string',
+            'month_count' => 'required|integer|min:1',
         ]);
 
+        $room = Room::where('number', $request->room_number)->firstOrFail();
+
+        $user = User::where('room_number', $request->room_number)
+            ->where('role', 'user')
+            ->where('status', 'Aktif')
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Tidak ada penghuni aktif di kamar ini',
+            ], 422);
+        }
+
+        $totalAmount = $room->price * $request->month_count;
+
         $payment = Payment::create([
-            'user_id' => $request->user_id,
-            'month' => $request->month,
-            'amount' => $request->amount,
+            'user_id' => $user->id,
+            'room_number' => $request->room_number,
+            'month' => $request->start_month,
+            'start_month' => $request->start_month,
+            'month_count' => $request->month_count,
+            'amount' => $totalAmount,
+            'paid_amount' => 0,
+            'remaining_amount' => $totalAmount,
             'status' => 'Belum Bayar',
         ]);
 
         return response()->json([
             'message' => 'Tagihan berhasil ditambahkan',
-            'payment' => $payment,
+            'payment' => $payment->load('user'),
         ], 201);
     }
 
@@ -50,7 +72,7 @@ class PaymentController extends Controller
         $request->validate([
             'month' => 'required|string',
             'amount' => 'required|numeric',
-            'status' => 'required|in:Belum Bayar,Menunggu Verifikasi,Lunas',
+            'status' => 'required|in:Belum Bayar,Menunggu Verifikasi,Kurang Bayar,Lunas',
             'method' => 'nullable|in:Tunai,Transfer',
         ]);
 
@@ -80,8 +102,21 @@ class PaymentController extends Controller
     {
         $payment = Payment::findOrFail($id);
 
+        if ($payment->paid_amount < $payment->amount) {
+            $payment->update([
+                'status' => 'Kurang Bayar',
+                'remaining_amount' => $payment->amount - $payment->paid_amount,
+            ]);
+
+            return response()->json([
+                'message' => 'Pembayaran kurang dari total tagihan',
+                'payment' => $payment,
+            ]);
+        }
+
         $payment->update([
             'status' => 'Lunas',
+            'remaining_amount' => 0,
         ]);
 
         return response()->json([
@@ -94,6 +129,7 @@ class PaymentController extends Controller
     {
         $request->validate([
             'method' => 'required|in:Tunai,Transfer',
+            'paid_amount' => 'required|numeric|min:1',
             'proof' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -105,8 +141,13 @@ class PaymentController extends Controller
             $proofPath = $request->file('proof')->store('payment-proofs', 'public');
         }
 
+        $totalPaid = $payment->paid_amount + $request->paid_amount;
+        $remainingAmount = $payment->amount - $totalPaid;
+
         $payment->update([
             'method' => $request->method,
+            'paid_amount' => $totalPaid,
+            'remaining_amount' => max($remainingAmount, 0),
             'proof' => $proofPath,
             'status' => 'Menunggu Verifikasi',
         ]);

@@ -17,6 +17,7 @@ import {
   Edit3,
   Home,
   Plus,
+  Search,
   Trash2,
 } from "lucide-react-native";
 
@@ -27,8 +28,10 @@ import { useApp } from "../../context/AppContext";
 export default function DataKamar() {
   const { kamar, tambahKamar, hapusKamar, editKamar } = useApp();
 
+  const [showForm, setShowForm] = useState(false);
   const [nomor, setNomor] = useState("");
   const [harga, setHarga] = useState("");
+  const [search, setSearch] = useState("");
 
   const [editId, setEditId] = useState(null);
   const [editNomor, setEditNomor] = useState("");
@@ -46,6 +49,7 @@ export default function DataKamar() {
 
     setNomor("");
     setHarga("");
+    setShowForm(false);
   };
 
   const handleHapus = (id) => {
@@ -89,6 +93,16 @@ export default function DataKamar() {
     setEditStatus("");
   };
 
+  const filteredKamar = kamar.filter((item) => {
+    const keyword = search.toLowerCase();
+
+    return (
+      item.nomor?.toLowerCase().includes(keyword) ||
+      item.status?.toLowerCase().includes(keyword) ||
+      String(item.harga).includes(keyword)
+    );
+  });
+
   return (
     <ProtectedRoute role="admin">
       <View style={styles.wrapper}>
@@ -111,32 +125,54 @@ export default function DataKamar() {
             </View>
           </View>
 
-          <View style={styles.formCard}>
-            <Text style={styles.formTitle}>Tambah Kamar Baru</Text>
+          <TouchableOpacity
+            style={styles.toggleFormButton}
+            onPress={() => setShowForm(!showForm)}
+          >
+            <Plus size={18} color="#FFFFFF" />
+            <Text style={styles.buttonText}>
+              {showForm ? "Tutup Form Kamar" : "Tambah Kamar Baru"}
+            </Text>
+          </TouchableOpacity>
 
+          {showForm && (
+            <View style={styles.formCard}>
+              <Text style={styles.formTitle}>Tambah Kamar Baru</Text>
+
+              <TextInput
+                style={styles.input}
+                placeholder="Nomor kamar, contoh: E13"
+                value={nomor}
+                onChangeText={setNomor}
+              />
+
+              <TextInput
+                style={styles.input}
+                placeholder="Harga kamar"
+                value={harga}
+                onChangeText={setHarga}
+                keyboardType="numeric"
+              />
+
+              <TouchableOpacity style={styles.addButton} onPress={handleTambah}>
+                <Plus size={18} color="#FFFFFF" />
+                <Text style={styles.buttonText}>Tambah Kamar</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <View style={styles.searchBox}>
+            <Search size={19} color="#64748B" />
             <TextInput
-              style={styles.input}
-              placeholder="Nomor kamar"
-              value={nomor}
-              onChangeText={setNomor}
+              style={styles.searchInput}
+              placeholder="Cari nomor kamar, status, atau harga..."
+              value={search}
+              onChangeText={setSearch}
             />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Harga kamar"
-              value={harga}
-              onChangeText={setHarga}
-              keyboardType="numeric"
-            />
-
-            <TouchableOpacity style={styles.addButton} onPress={handleTambah}>
-              <Plus size={18} color="#FFFFFF" />
-              <Text style={styles.buttonText}>Tambah Kamar</Text>
-            </TouchableOpacity>
           </View>
 
           <FlatList
-            data={kamar}
+            data={filteredKamar}
             keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.listContent}
@@ -145,7 +181,7 @@ export default function DataKamar() {
                 <DoorOpen size={42} color="#94A3B8" />
                 <Text style={styles.emptyTitle}>Belum ada kamar</Text>
                 <Text style={styles.empty}>
-                  Data kamar yang ditambahkan akan tampil di sini.
+                  Data kamar kost akan tampil di sini.
                 </Text>
               </View>
             }
@@ -153,7 +189,7 @@ export default function DataKamar() {
               <View style={styles.card}>
                 {editId === item.id ? (
                   <View>
-                    <Text style={styles.formTitle}>Edit Data Kamar</Text>
+                    <Text style={styles.formTitle}>Edit Kamar</Text>
 
                     <TextInput
                       style={styles.input}
@@ -262,14 +298,8 @@ export default function DataKamar() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    backgroundColor: "#F8FAFC",
-  },
-  container: {
-    flex: 1,
-    padding: 24,
-  },
+  wrapper: { flex: 1, backgroundColor: "#F8FAFC" },
+  container: { flex: 1, padding: 24 },
   header: {
     marginTop: 45,
     marginBottom: 20,
@@ -287,9 +317,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 12,
   },
-  headerText: {
-    flex: 1,
-  },
+  headerText: { flex: 1 },
   headerIcon: {
     width: 48,
     height: 48,
@@ -298,15 +326,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 26,
-    fontWeight: "bold",
-    color: "#0F172A",
-  },
-  subtitle: {
-    color: "#64748B",
-    marginTop: 3,
-    fontSize: 13,
+  title: { fontSize: 26, fontWeight: "bold", color: "#0F172A" },
+  subtitle: { color: "#64748B", marginTop: 3, fontSize: 13 },
+  toggleFormButton: {
+    backgroundColor: "#2563EB",
+    padding: 14,
+    borderRadius: 16,
+    marginBottom: 14,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
   },
   formCard: {
     backgroundColor: "#FFFFFF",
@@ -331,7 +361,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addButton: {
-    backgroundColor: "#16A34A",
+    backgroundColor: "#2563EB",
     padding: 14,
     borderRadius: 14,
     flexDirection: "row",
@@ -339,9 +369,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
   },
-  listContent: {
-    paddingBottom: 30,
+  searchBox: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    paddingHorizontal: 14,
+    marginBottom: 14,
+    flexDirection: "row",
+    alignItems: "center",
   },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 13,
+    marginLeft: 10,
+    color: "#0F172A",
+  },
+  listContent: { paddingBottom: 30 },
   card: {
     backgroundColor: "#FFFFFF",
     borderRadius: 24,
@@ -350,11 +394,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E2E8F0",
   },
-  roomHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 14,
-  },
+  roomHeader: { flexDirection: "row", alignItems: "center", marginBottom: 14 },
   roomIcon: {
     width: 58,
     height: 58,
@@ -364,9 +404,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 14,
   },
-  roomInfo: {
-    flex: 1,
-  },
+  roomInfo: { flex: 1 },
   roomTitle: {
     fontSize: 19,
     fontWeight: "bold",
@@ -379,42 +417,25 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 999,
   },
-  badgeEmpty: {
-    backgroundColor: "#DCFCE7",
-  },
-  badgeFilled: {
-    backgroundColor: "#DBEAFE",
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-  badgeTextEmpty: {
-    color: "#16A34A",
-  },
-  badgeTextFilled: {
-    color: "#2563EB",
-  },
+  badgeEmpty: { backgroundColor: "#DCFCE7" },
+  badgeFilled: { backgroundColor: "#DBEAFE" },
+  badgeText: { fontSize: 12, fontWeight: "bold" },
+  badgeTextEmpty: { color: "#16A34A" },
+  badgeTextFilled: { color: "#2563EB" },
   priceBox: {
     backgroundColor: "#F8FAFC",
     padding: 14,
     borderRadius: 18,
     marginBottom: 12,
   },
-  priceLabel: {
-    color: "#64748B",
-    fontSize: 13,
-  },
+  priceLabel: { color: "#64748B", fontSize: 13 },
   priceValue: {
     color: "#0F172A",
     fontSize: 22,
     fontWeight: "bold",
     marginTop: 4,
   },
-  actionRow: {
-    flexDirection: "row",
-    gap: 10,
-  },
+  actionRow: { flexDirection: "row", gap: 10 },
   editButton: {
     flex: 1,
     backgroundColor: "#2563EB",
@@ -451,11 +472,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginTop: 10,
   },
-  buttonText: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontWeight: "bold",
-  },
+  buttonText: { color: "#FFFFFF", textAlign: "center", fontWeight: "bold" },
   emptyBox: {
     backgroundColor: "#FFFFFF",
     borderRadius: 24,
@@ -471,9 +488,5 @@ const styles = StyleSheet.create({
     color: "#0F172A",
     marginTop: 12,
   },
-  empty: {
-    textAlign: "center",
-    marginTop: 6,
-    color: "#64748B",
-  },
+  empty: { textAlign: "center", marginTop: 6, color: "#64748B" },
 });

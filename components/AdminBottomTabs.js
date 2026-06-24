@@ -12,10 +12,18 @@ import { useApp } from "../context/AppContext";
 export default function AdminBottomTabs() {
   const pathname = usePathname();
 
-  const { pembayaran } = useApp();
+  const { pembayaran, penghuni, keluhan } = useApp();
 
   const pembayaranMenunggu = pembayaran.filter(
     (item) => item.status === "Menunggu Verifikasi"
+  ).length;
+
+  const penghuniMenunggu = penghuni.filter(
+    (item) => item.status !== "Aktif"
+  ).length;
+
+  const keluhanAktif = keluhan.filter(
+    (item) => item.status !== "Selesai"
   ).length;
 
   const tabs = [
@@ -44,14 +52,23 @@ export default function AdminBottomTabs() {
                 color={active ? "#2563EB" : "#94A3B8"}
               />
 
-              {tab.label === "Bayar" &&
-                pembayaranMenunggu > 0 && (
-                  <View style={styles.badge}>
-                    <Text style={styles.badgeText}>
-                      {pembayaranMenunggu}
-                    </Text>
-                  </View>
-                )}
+              {tab.label === "Penghuni" && penghuniMenunggu > 0 && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{penghuniMenunggu}</Text>
+                </View>
+              )}
+
+              {tab.label === "Bayar" && pembayaranMenunggu > 0 && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{pembayaranMenunggu}</Text>
+                </View>
+              )}
+
+              {tab.label === "Lainnya" && keluhanAktif > 0 && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{keluhanAktif}</Text>
+                </View>
+              )}
             </View>
             <Text style={[styles.text, active && styles.activeText]}>
               {tab.label}

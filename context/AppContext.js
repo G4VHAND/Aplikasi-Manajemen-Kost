@@ -13,6 +13,7 @@ export function AppProvider({ children }) {
   const [pembayaran, setPembayaran] = useState([]);
   const [keluhan, setKeluhan] = useState([]);
   const [pengumuman, setPengumuman] = useState([]);
+  const [riwayatPenghuni, setRiwayatPenghuni] = useState([]);
 
   useEffect(() => {
     loadData();
@@ -40,6 +41,7 @@ export function AppProvider({ children }) {
       foto: item.photo,
       kamar: item.room_number || "-",
       status: item.status,
+      exit_date: item.exit_date,
     }));
 
   const normalizeKamar = (data) =>
@@ -51,16 +53,21 @@ export function AppProvider({ children }) {
     }));
 
   const normalizePembayaran = (data) =>
-    data.map((item) => ({
-      id: item.id,
-      user_id: item.user_id,
-      nama: item.user?.name || "-",
-      bulan: item.month,
-      jumlah: Number(item.amount),
-      status: item.status,
-      metode: item.method,
-      proof: item.proof,
-    }));
+  data.map((item) => ({
+    id: item.id,
+    user_id: item.user_id,
+    nama: item.user?.name || "-",
+    kamar: item.room_number || "-",
+    bulan: item.month,
+    start_month: item.start_month,
+    month_count: item.month_count || 1,
+    jumlah: Number(item.amount),
+    paid_amount: Number(item.paid_amount || 0),
+    remaining_amount: Number(item.remaining_amount || 0),
+    status: item.status,
+    metode: item.method,
+    proof: item.proof,
+  }));
 
   const normalizeKeluhan = (data) =>
     data.map((item) => ({
@@ -102,12 +109,14 @@ export function AppProvider({ children }) {
     try {
       const [
         penghuniRes,
+        historyRes,
         kamarRes,
         pembayaranRes,
         keluhanRes,
         pengumumanRes,
       ] = await Promise.all([
         api.get("/users"),
+        api.get("/users/history"),
         api.get("/rooms"),
         api.get("/payments"),
         api.get("/complaints"),
@@ -115,6 +124,7 @@ export function AppProvider({ children }) {
       ]);
 
       setPenghuni(normalizePenghuni(penghuniRes.data));
+      setRiwayatPenghuni(normalizePenghuni(historyRes.data));
       setKamar(normalizeKamar(kamarRes.data));
       setPembayaran(normalizePembayaran(pembayaranRes.data));
       setKeluhan(normalizeKeluhan(keluhanRes.data));
@@ -153,21 +163,26 @@ export function AppProvider({ children }) {
         };
       }
 
-      await AsyncStorage.setItem("token", response.data.token);
-      await AsyncStorage.setItem("user", JSON.stringify(dataUser));
-      setUser(dataUser);
+     await AsyncStorage.setItem("token", response.data.token);
+     await AsyncStorage.setItem("user", JSON.stringify(dataUser));
+     setUser(dataUser);
 
+     await refreshData();
 
-      return { success: true };
+     return { success: true };
     } catch (error) {
-      return {
-        success: false,
-        message:
-          error?.response?.data?.message ||
-          error?.response?.data?.email?.[0] ||
-          "Login gagal",
-      };
-    }
+        console.log("LOGIN ERROR");
+        console.log(error.response?.status);
+        console.log(error.response?.data);
+        console.log(error.message);
+
+        return {
+          success: false,
+          message:
+            error?.response?.data?.message ||
+            "Login gagal",
+        };
+      }
   };
 
   const logout = async () => {
@@ -186,6 +201,7 @@ export function AppProvider({ children }) {
     setPembayaran([]);
     setKeluhan([]);
     setPengumuman([]);
+    setRiwayatPenghuni([]);
   };
 
   const registerPenghuni = async (data) => {
@@ -246,21 +262,25 @@ export function AppProvider({ children }) {
   };
 
   const hapusPenghuni = async (id) => {
-    await api.delete(`/users/${id}`);
-    await refreshData();
+    try {
+      const res = await api.delete(`/users/${id}`);
+
+      console.log("DELETE SUCCESS:", res.data);
+
+      await refreshData();
+    } catch (error) {
+      console.log(
+        "DELETE ERROR:",
+        error?.response?.data || error.message
+      );
+    }
   };
 
-  const tambahPembayaran = async (nama, bulan, jumlah) => {
-    const penghuniDitemukan = penghuni.find((item) => item.nama === nama);
-
-    if (!penghuniDitemukan) {
-      throw new Error("Penghuni tidak ditemukan");
-    }
-
+  const tambahPembayaran = async (room_number, start_month, month_count) => {
     await api.post("/payments", {
-      user_id: penghuniDitemukan.id,
-      month: bulan,
-      amount: Number(jumlah),
+      room_number,
+      start_month,
+      month_count: Number(month_count),
     });
 
     await refreshData();
@@ -287,30 +307,36 @@ export function AppProvider({ children }) {
     await refreshData();
   };
 
-  const ajukanPembayaran = async (id, metode, bukti = null) => {
-  const formData = new FormData();
+  const ajukanPembayaran = async (
+    id,
+    metode,
+    paidAmount,
+    bukti = null
+  ) => {
+    const formData = new FormData();
 
-  formData.append("method", metode);
+    formData.append("method", metode);
+    formData.append("paid_amount", Number(paidAmount));
 
-  if (bukti) {
-    formData.append("proof", {
-      uri: bukti.uri,
-      name: bukti.fileName || "bukti-pembayaran.jpg",
-      type: bukti.mimeType || "image/jpeg",
+    if (bukti) {
+      formData.append("proof", {
+        uri: bukti.uri,
+        name: bukti.fileName || "bukti-pembayaran.jpg",
+        type: bukti.mimeType || "image/jpeg",
+      });
+    }
+
+    const response = await api.post(`/payments/${id}/submit`, formData, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+      },
     });
-  }
 
-  const response = await api.post(`/payments/${id}/submit`, formData, {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "multipart/form-data",
-    },
-  });
+    console.log("AJUKAN PEMBAYARAN RESPONSE:", response.data);
 
-  console.log("AJUKAN PEMBAYARAN RESPONSE:", response.data);
-
-  await refreshData();
-};
+    await refreshData();
+  };
 
   const tambahKeluhan = async (isi) => {
     await api.post("/complaints", {
@@ -349,12 +375,14 @@ export function AppProvider({ children }) {
   };
 
   const editPenghuni = async (id, dataBaru) => {
-    // sementara belum dibuat endpoint edit user detail
-    const dataTerbaru = penghuni.map((item) =>
-      item.id === id ? { ...item, ...dataBaru } : item
-    );
+    await api.put(`/users/${id}`, {
+      name: dataBaru.nama,
+      phone: dataBaru.noHp,
+      address: dataBaru.alamat,
+      room_number: dataBaru.kamar,
+    });
 
-    setPenghuni(dataTerbaru);
+    await refreshData();
   };
 
   const resetData = async () => {
@@ -366,6 +394,7 @@ export function AppProvider({ children }) {
     setPembayaran([]);
     setKeluhan([]);
     setPengumuman([]);
+    setRiwayatPenghuni([]);
   };
 
   return (
@@ -382,6 +411,7 @@ export function AppProvider({ children }) {
         konfirmasiPenghuni,
         hapusPenghuni,
         editPenghuni,
+        riwayatPenghuni,
 
         kamar,
         tambahKamar,

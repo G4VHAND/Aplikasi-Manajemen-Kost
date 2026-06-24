@@ -41,8 +41,12 @@ Route::middleware('auth:sanctum')->group(function () {
     */
 
     Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/history', [UserController::class, 'history']);
+    
     Route::put('/users/{id}/confirm', [UserController::class, 'confirm']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    
 
     /*
     |--------------------------------------------------------------------------

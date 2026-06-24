@@ -9,11 +9,13 @@ import {
 
 import {
   Bell,
+  CheckCircle,
   CreditCard,
   DoorOpen,
   LogOut,
   MessageSquareWarning,
   UserCircle,
+  Wallet,
 } from "lucide-react-native";
 
 import ProtectedRoute from "../../components/ProtectedRoute";
@@ -23,8 +25,21 @@ import { useApp } from "../../context/AppContext";
 export default function UserDashboard() {
   const { logout, user, pembayaran, keluhan, pengumuman } = useApp();
 
-  const tagihanAktif = pembayaran.filter(
-    (item) => item.nama === user?.nama && item.status !== "Lunas"
+  const tagihanSaya = pembayaran.filter((item) => item.user_id === user?.id);
+
+  const tagihanAktif = tagihanSaya.filter(
+    (item) => item.status !== "Lunas"
+  ).length;
+
+  const totalSisaTagihan = tagihanSaya
+    .filter((item) => item.status !== "Lunas")
+    .reduce(
+      (total, item) => total + Number(item.remaining_amount ?? item.jumlah),
+      0
+    );
+
+  const pembayaranLunas = tagihanSaya.filter(
+    (item) => item.status === "Lunas"
   ).length;
 
   const keluhanAktif = keluhan.filter(
@@ -48,7 +63,7 @@ export default function UserDashboard() {
         >
           <View style={styles.header}>
             <View>
-              <Text style={styles.greeting}>Halo, Penghuni</Text>
+              <Text style={styles.greeting}>Selamat datang</Text>
               <Text style={styles.title}>{user?.nama || "Penghuni"}</Text>
             </View>
 
@@ -58,16 +73,81 @@ export default function UserDashboard() {
           </View>
 
           <View style={styles.roomCard}>
-            <View style={styles.roomIcon}>
-              <DoorOpen size={30} color="#FFFFFF" />
+            <View style={styles.roomTop}>
+              <View style={styles.roomIcon}>
+                <DoorOpen size={30} color="#FFFFFF" />
+              </View>
+
+              <View style={styles.statusBadge}>
+                <CheckCircle size={14} color="#DCFCE7" />
+                <Text style={styles.statusBadgeText}>
+                  {user?.status || "Aktif"}
+                </Text>
+              </View>
             </View>
 
             <Text style={styles.roomLabel}>Kamar Anda</Text>
             <Text style={styles.roomValue}>Kamar {user?.kamar || "-"}</Text>
             <Text style={styles.roomNote}>
-              Pantau tagihan, keluhan, dan informasi kost melalui aplikasi.
+              Pantau tagihan, pembayaran, keluhan, dan informasi kost.
             </Text>
           </View>
+
+          <TouchableOpacity
+            style={[
+              styles.paymentSummary,
+              totalSisaTagihan > 0
+                ? styles.paymentWarning
+                : styles.paymentSuccess,
+            ]}
+            onPress={() => router.push("/user/tagihan")}
+          >
+            <View style={styles.paymentSummaryIcon}>
+              <Wallet
+                size={28}
+                color={totalSisaTagihan > 0 ? "#D97706" : "#16A34A"}
+              />
+            </View>
+
+            <View style={styles.paymentSummaryContent}>
+              <Text
+                style={[
+                  styles.paymentSummaryTitle,
+                  totalSisaTagihan > 0
+                    ? styles.warningText
+                    : styles.successText,
+                ]}
+              >
+                {totalSisaTagihan > 0
+                  ? "Ada Tagihan Aktif"
+                  : "Pembayaran Aman"}
+              </Text>
+
+              <Text
+                style={[
+                  styles.paymentSummaryValue,
+                  totalSisaTagihan > 0
+                    ? styles.warningText
+                    : styles.successText,
+                ]}
+              >
+                {totalSisaTagihan > 0
+                  ? `Rp ${totalSisaTagihan.toLocaleString("id-ID")}`
+                  : "Tidak ada tunggakan"}
+              </Text>
+
+              <Text
+                style={[
+                  styles.paymentSummaryNote,
+                  totalSisaTagihan > 0
+                    ? styles.warningText
+                    : styles.successText,
+                ]}
+              >
+                Ketuk untuk melihat detail tagihan
+              </Text>
+            </View>
+          </TouchableOpacity>
 
           <Text style={styles.sectionTitle}>Ringkasan Anda</Text>
 
@@ -80,10 +160,24 @@ export default function UserDashboard() {
             />
 
             <StatCard
+              Icon={CheckCircle}
+              color="#16A34A"
+              value={pembayaranLunas}
+              label="Pembayaran Lunas"
+            />
+
+            <StatCard
               Icon={MessageSquareWarning}
               color="#F59E0B"
               value={keluhanAktif}
               label="Keluhan Aktif"
+            />
+
+            <StatCard
+              Icon={DoorOpen}
+              color="#8B5CF6"
+              value={user?.kamar || "-"}
+              label="Kamar"
             />
           </View>
 
@@ -124,7 +218,7 @@ function StatCard({ Icon, color, value, label }) {
   return (
     <View style={styles.statCard}>
       <View style={styles.statIconBox}>
-        <Icon size={26} color={color} />
+        <Icon size={25} color={color} />
       </View>
 
       <Text style={styles.statValue}>{value}</Text>
@@ -143,10 +237,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   scrollContent: {
-    paddingBottom: 100,
+    paddingBottom: 110,
   },
   header: {
-    marginTop: 45,
+    marginTop: 48,
     marginBottom: 22,
     flexDirection: "row",
     alignItems: "center",
@@ -157,33 +251,54 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   title: {
-    fontSize: 28,
+    fontSize: 29,
     fontWeight: "bold",
     color: "#0F172A",
     marginTop: 4,
   },
   avatar: {
-    width: 54,
-    height: 54,
-    borderRadius: 18,
+    width: 56,
+    height: 56,
+    borderRadius: 20,
     backgroundColor: "#DCFCE7",
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#BBF7D0",
   },
   roomCard: {
     backgroundColor: "#16A34A",
-    borderRadius: 26,
-    padding: 22,
-    marginBottom: 24,
+    borderRadius: 30,
+    padding: 24,
+    marginBottom: 18,
+  },
+  roomTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 18,
   },
   roomIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 16,
+    width: 54,
+    height: 54,
+    borderRadius: 18,
     backgroundColor: "rgba(255,255,255,0.18)",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 14,
+  },
+  statusBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    backgroundColor: "rgba(255,255,255,0.14)",
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 999,
+  },
+  statusBadgeText: {
+    color: "#DCFCE7",
+    fontSize: 12,
+    fontWeight: "bold",
   },
   roomLabel: {
     color: "#DCFCE7",
@@ -191,7 +306,7 @@ const styles = StyleSheet.create({
   },
   roomValue: {
     color: "#FFFFFF",
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "bold",
     marginTop: 8,
   },
@@ -201,36 +316,85 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
   },
+  paymentSummary: {
+    borderRadius: 24,
+    padding: 16,
+    marginBottom: 22,
+    borderWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  paymentWarning: {
+    backgroundColor: "#FEF3C7",
+    borderColor: "#FCD34D",
+  },
+  paymentSuccess: {
+    backgroundColor: "#DCFCE7",
+    borderColor: "#BBF7D0",
+  },
+  paymentSummaryIcon: {
+    width: 54,
+    height: 54,
+    borderRadius: 18,
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 14,
+  },
+  paymentSummaryContent: {
+    flex: 1,
+  },
+  paymentSummaryTitle: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  paymentSummaryValue: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginTop: 4,
+  },
+  paymentSummaryNote: {
+    fontSize: 12,
+    marginTop: 3,
+  },
+  warningText: {
+    color: "#92400E",
+  },
+  successText: {
+    color: "#166534",
+  },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 21,
     fontWeight: "bold",
     color: "#0F172A",
     marginBottom: 14,
   },
   grid: {
     flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "space-between",
     marginBottom: 22,
   },
   statCard: {
     width: "48%",
     backgroundColor: "#FFFFFF",
-    borderRadius: 22,
+    borderRadius: 24,
     padding: 16,
     borderWidth: 1,
     borderColor: "#E2E8F0",
+    marginBottom: 13,
   },
   statIconBox: {
-    width: 44,
-    height: 44,
-    borderRadius: 15,
+    width: 46,
+    height: 46,
+    borderRadius: 16,
     backgroundColor: "#F1F5F9",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
+    marginBottom: 11,
   },
   statValue: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#0F172A",
   },
@@ -276,7 +440,7 @@ const styles = StyleSheet.create({
   logoutButton: {
     backgroundColor: "#EF4444",
     padding: 15,
-    borderRadius: 16,
+    borderRadius: 18,
     marginTop: 4,
     marginBottom: 20,
     flexDirection: "row",

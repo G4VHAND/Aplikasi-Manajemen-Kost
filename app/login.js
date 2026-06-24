@@ -4,6 +4,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -14,7 +15,6 @@ import {
 import {
   Building2,
   Lock,
-  LogIn,
   Mail,
   ShieldCheck,
   UserPlus,
@@ -56,21 +56,28 @@ export default function LoginScreen() {
       style={styles.wrapper}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <View style={styles.container}>
-        <View style={styles.logoBox}>
-          <Building2 size={38} color="#2563EB" />
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.hero}>
+          <View style={styles.logoBox}>
+            <Building2 size={40} color="#2563EB" />
+          </View>
+
+          <Text style={styles.title}>KostKu</Text>
+          <Text style={styles.subtitle}>
+            Sistem Informasi Manajemen Kost Berbasis Mobile
+          </Text>
         </View>
 
-        <Text style={styles.title}>KostKu</Text>
-        <Text style={styles.subtitle}>
-          Sistem Informasi Manajemen Kost
-        </Text>
-
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Masuk Akun</Text>
-          <Text style={styles.cardSubtitle}>
-            Gunakan email dan password untuk masuk
-          </Text>
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Masuk Akun</Text>
+            <Text style={styles.cardSubtitle}>
+              Pilih role sesuai akun yang digunakan
+            </Text>
+          </View>
 
           <Text style={styles.label}>Email</Text>
           <View style={styles.inputWrapper}>
@@ -78,6 +85,7 @@ export default function LoginScreen() {
             <TextInput
               style={styles.input}
               placeholder="Masukkan email"
+              placeholderTextColor="#94A3B8"
               keyboardType="email-address"
               value={email}
               onChangeText={setEmail}
@@ -91,25 +99,20 @@ export default function LoginScreen() {
             <TextInput
               style={styles.input}
               placeholder="Masukkan password"
+              placeholderTextColor="#94A3B8"
               secureTextEntry
               value={password}
               onChangeText={setPassword}
             />
           </View>
 
-          <TouchableOpacity
-            style={styles.adminButton}
-            onPress={handleLoginAdmin}
-          >
-            <ShieldCheck size={18} color="#FFFFFF" />
+          <TouchableOpacity style={styles.adminButton} onPress={handleLoginAdmin}>
+            <ShieldCheck size={19} color="#FFFFFF" />
             <Text style={styles.buttonText}>Masuk sebagai Admin</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.userButton}
-            onPress={handleLoginUser}
-          >
-            <Users size={18} color="#FFFFFF" />
+          <TouchableOpacity style={styles.userButton} onPress={handleLoginUser}>
+            <Users size={19} color="#FFFFFF" />
             <Text style={styles.buttonText}>Masuk sebagai Penghuni</Text>
           </TouchableOpacity>
         </View>
@@ -118,19 +121,15 @@ export default function LoginScreen() {
           style={styles.registerButton}
           onPress={() => router.push("/register")}
         >
-          <UserPlus size={17} color="#2563EB" />
-          <Text style={styles.registerText}>
-            Belum punya akun? Daftar Penghuni
-          </Text>
+          <UserPlus size={18} color="#2563EB" />
+          <Text style={styles.registerText}>Daftar Penghuni Baru</Text>
         </TouchableOpacity>
 
-        <View style={styles.helperBox}>
-          <LogIn size={15} color="#94A3B8" />
-          <Text style={styles.helper}>
-            Admin demo: admin@kost.com / admin123
-          </Text>
+        <View style={styles.demoBox}>
+          <Text style={styles.demoTitle}>Akun Demo Admin</Text>
+          <Text style={styles.demoText}>admin@kost.com / admin123</Text>
         </View>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -141,75 +140,83 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8FAFC",
   },
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 24,
     justifyContent: "center",
   },
+  hero: {
+    alignItems: "center",
+    marginBottom: 26,
+  },
   logoBox: {
-    width: 82,
-    height: 82,
-    borderRadius: 26,
+    width: 88,
+    height: 88,
+    borderRadius: 28,
     backgroundColor: "#DBEAFE",
-    alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#BFDBFE",
   },
   title: {
-    fontSize: 38,
+    fontSize: 40,
     fontWeight: "bold",
     color: "#0F172A",
-    textAlign: "center",
   },
   subtitle: {
     color: "#64748B",
     textAlign: "center",
-    marginTop: 6,
-    marginBottom: 24,
+    marginTop: 8,
+    lineHeight: 20,
+    paddingHorizontal: 12,
   },
   card: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 26,
-    padding: 20,
+    borderRadius: 28,
+    padding: 22,
     borderWidth: 1,
     borderColor: "#E2E8F0",
   },
+  cardHeader: {
+    marginBottom: 20,
+  },
   cardTitle: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#0F172A",
   },
   cardSubtitle: {
     color: "#64748B",
-    marginTop: 4,
-    marginBottom: 18,
+    marginTop: 5,
+    lineHeight: 20,
   },
   label: {
-    fontWeight: "600",
+    fontWeight: "700",
     color: "#0F172A",
-    marginBottom: 6,
+    marginBottom: 7,
   },
   inputWrapper: {
     backgroundColor: "#F8FAFC",
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: "#CBD5E1",
-    marginBottom: 14,
+    marginBottom: 15,
     paddingHorizontal: 14,
     flexDirection: "row",
     alignItems: "center",
   },
   input: {
     flex: 1,
-    paddingVertical: 14,
+    paddingVertical: 15,
     marginLeft: 10,
     color: "#0F172A",
   },
   adminButton: {
     backgroundColor: "#2563EB",
-    padding: 15,
-    borderRadius: 16,
-    marginTop: 4,
+    padding: 16,
+    borderRadius: 18,
+    marginTop: 6,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -217,8 +224,8 @@ const styles = StyleSheet.create({
   },
   userButton: {
     backgroundColor: "#16A34A",
-    padding: 15,
-    borderRadius: 16,
+    padding: 16,
+    borderRadius: 18,
     marginTop: 12,
     flexDirection: "row",
     alignItems: "center",
@@ -229,27 +236,36 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     textAlign: "center",
     fontWeight: "bold",
+    fontSize: 15,
   },
   registerButton: {
-    marginTop: 20,
+    marginTop: 22,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 6,
+    gap: 7,
   },
   registerText: {
     color: "#2563EB",
+    fontWeight: "800",
+  },
+  demoBox: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
+    padding: 14,
+    marginTop: 18,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    alignItems: "center",
+  },
+  demoTitle: {
+    color: "#64748B",
+    fontSize: 12,
     fontWeight: "700",
   },
-  helperBox: {
-    marginTop: 14,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 6,
-  },
-  helper: {
-    color: "#94A3B8",
-    fontSize: 12,
+  demoText: {
+    color: "#0F172A",
+    fontWeight: "bold",
+    marginTop: 4,
   },
 });

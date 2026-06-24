@@ -1,9 +1,14 @@
-import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import {
+  router,
+  useFocusEffect,
+  useLocalSearchParams,
+} from "expo-router";
 import { useCallback, useState } from "react";
 import {
   Alert,
   FlatList,
   Image,
+  Modal,
   StyleSheet,
   Text,
   TextInput,
@@ -19,8 +24,10 @@ import {
   Mail,
   MapPin,
   Phone,
+  Search,
   Trash2,
-  Users
+  Users,
+  X,
 } from "lucide-react-native";
 
 import AdminBottomTabs from "../../components/AdminBottomTabs";
@@ -28,18 +35,37 @@ import ProtectedRoute from "../../components/ProtectedRoute";
 import { useApp } from "../../context/AppContext";
 
 export default function DataPenghuni() {
-
   const app = useApp();
-
-  if (!app) {
-    return (
-      <View style={styles.container}>
-        <Text>Context belum terbaca</Text>
-      </View>
-    );
-  }
-
   const { from } = useLocalSearchParams();
+
+  const {
+    penghuni,
+    kamar,
+    konfirmasiPenghuni,
+    hapusPenghuni,
+    editPenghuni,
+    refreshData,
+  } = app;
+
+  const [search, setSearch] = useState("");
+
+  const [kamarDipilih, setKamarDipilih] = useState({});
+  const [modalKamar, setModalKamar] = useState(false);
+  const [penghuniAktifId, setPenghuniAktifId] = useState(null);
+
+  const [editId, setEditId] = useState(null);
+  const [editNama, setEditNama] = useState("");
+  const [editNoHp, setEditNoHp] = useState("");
+  const [editAlamat, setEditAlamat] = useState("");
+  const [editKamar, setEditKamar] = useState("");
+
+  const kamarKosong = kamar.filter((item) => item.status === "Kosong");
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshData();
+    }, [refreshData])
+  );
 
   const handleBack = () => {
     if (from === "sederhana") {
@@ -49,51 +75,54 @@ export default function DataPenghuni() {
     }
   };
 
-  const {
-    penghuni,
-    konfirmasiPenghuni,
-    hapusPenghuni,
-    editPenghuni,
-    refreshData,
-  } = app;
+  const bukaModalKamar = (id) => {
+    setPenghuniAktifId(id);
+    setModalKamar(true);
+  };
 
-  const [kamarInput, setKamarInput] = useState({});
-  const [editId, setEditId] = useState(null);
-  const [editNama, setEditNama] = useState("");
-  const [editNoHp, setEditNoHp] = useState("");
-  const [editAlamat, setEditAlamat] = useState("");
-  const [editKamar, setEditKamar] = useState("");
+  const pilihKamar = (item) => {
+    if (editId) {
+      setEditKamar(item.nomor);
+    } else {
+      setKamarDipilih({
+        ...kamarDipilih,
+        [penghuniAktifId]: item.nomor,
+      });
+    }
 
-  useFocusEffect(
-    useCallback(() => {
-      refreshData();
-    }, [refreshData])
-  );
+    setModalKamar(false);
+  };
 
   const handleKonfirmasi = async (id) => {
-    const nomorKamar = kamarInput[id];
+    const nomorKamar = kamarDipilih[id];
 
     if (!nomorKamar) {
-      Alert.alert("Peringatan", "Nomor kamar wajib diisi");
+      Alert.alert("Peringatan", "Pilih kamar kosong terlebih dahulu");
       return;
     }
 
     await konfirmasiPenghuni(id, nomorKamar);
+
     Alert.alert("Berhasil", "Penghuni berhasil dikonfirmasi");
+
+    setKamarDipilih({
+      ...kamarDipilih,
+      [id]: "",
+    });
   };
 
   const handleHapus = (id) => {
     Alert.alert(
-      "Hapus Penghuni",
-      "Apakah Anda yakin ingin menghapus data penghuni ini?",
+      "Keluarkan Penghuni",
+      "Apakah Anda yakin ingin mengeluarkan penghuni ini?",
       [
         { text: "Batal", style: "cancel" },
         {
-          text: "Hapus",
+          text: "Keluarkan",
           style: "destructive",
           onPress: async () => {
             await hapusPenghuni(id);
-            Alert.alert("Berhasil", "Data penghuni berhasil dihapus");
+            Alert.alert("Berhasil", "Data penghuni berhasil dikeluarkan dan kamar dikosongkan");
           },
         },
       ]
@@ -130,32 +159,60 @@ export default function DataPenghuni() {
     setEditKamar("");
   };
 
+  const filteredPenghuni = penghuni.filter((item) =>
+    {
+      const keyword = search.toLowerCase();
+      return (
+        item.nama?.toLowerCase().includes(keyword) ||
+        item.email?.toLowerCase().includes(keyword) ||
+        item.noHp?.toLowerCase().includes(keyword) ||
+        item.alamat?.toLowerCase().includes(keyword) ||
+        item.kamar?.toString().toLowerCase().includes(keyword)
+      );
+    }
+  );
+  
+
   return (
     <ProtectedRoute role="admin">
       <View style={styles.wrapper}>
         <View style={styles.container}>
-          <View style={styles.header}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backIcon} onPress={handleBack}>
+            <ArrowLeft size={22} color="#0F172A" />
+          </TouchableOpacity>
+
+          <View style={styles.headerText}>
+            <Text style={styles.title}>Data Penghuni</Text>
+            <Text style={styles.subtitle}>
+              Kelola data dan konfirmasi penghuni
+            </Text>
+
             <TouchableOpacity
-              style={styles.backIcon}
-              onPress={handleBack}
+              style={styles.historyButton}
+              onPress={() => router.push("/admin/riwayat-penghuni")}
             >
-              <ArrowLeft size={22} color="#0F172A" />
+              <Text style={styles.historyText}>Riwayat Penghuni</Text>
             </TouchableOpacity>
-
-            <View style={styles.headerText}>
-              <Text style={styles.title}>Data Penghuni</Text>
-              <Text style={styles.subtitle}>
-                Kelola data dan konfirmasi penghuni
-              </Text>
-            </View>
-
-            <View style={styles.headerIcon}>
-              <Users size={24} color="#2563EB" />
-            </View>
           </View>
 
+          <View style={styles.headerIcon}>
+            <Users size={24} color="#2563EB" />
+          </View>
+        </View>
+
+          <View style={styles.searchBox}>
+          <Search size={19} color="#64748B" />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Cari nama, email, kamar, atau status..."
+            value={search}
+            onChangeText={setSearch}
+          />
+        </View>
+
           <FlatList
-            data={penghuni}
+            data={filteredPenghuni}
             keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.listContent}
@@ -235,12 +292,18 @@ export default function DataPenghuni() {
                       onChangeText={setEditAlamat}
                     />
 
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Kamar"
-                      value={editKamar}
-                      onChangeText={setEditKamar}
-                    />
+                    <TouchableOpacity
+                      style={styles.selectBox}
+                      onPress={() => {
+                        setPenghuniAktifId(editId);
+                        setModalKamar(true);
+                      }}
+                    >
+                      <DoorOpen size={19} color="#64748B" />
+                      <Text style={styles.selectText}>
+                        {editKamar ? `Kamar ${editKamar}` : "Pilih kamar"}
+                      </Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity
                       style={styles.saveButton}
@@ -272,7 +335,7 @@ export default function DataPenghuni() {
                       onPress={() => handleHapus(item.id)}
                     >
                       <Trash2 size={17} color="#FFFFFF" />
-                      <Text style={styles.buttonText}>Hapus</Text>
+                      <Text style={styles.buttonText}>Keluar</Text>
                     </TouchableOpacity>
                   </View>
                 )}
@@ -281,17 +344,17 @@ export default function DataPenghuni() {
                   <View style={styles.confirmBox}>
                     <Text style={styles.formTitle}>Konfirmasi Penghuni</Text>
 
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Masukkan nomor kamar"
-                      value={kamarInput[item.id] || ""}
-                      onChangeText={(text) =>
-                        setKamarInput({
-                          ...kamarInput,
-                          [item.id]: text,
-                        })
-                      }
-                    />
+                    <TouchableOpacity
+                      style={styles.selectBox}
+                      onPress={() => bukaModalKamar(item.id)}
+                    >
+                      <DoorOpen size={19} color="#64748B" />
+                      <Text style={styles.selectText}>
+                        {kamarDipilih[item.id]
+                          ? `Kamar ${kamarDipilih[item.id]}`
+                          : "Pilih kamar kosong"}
+                      </Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity
                       style={styles.confirmButton}
@@ -308,6 +371,41 @@ export default function DataPenghuni() {
         </View>
 
         <AdminBottomTabs />
+
+        <Modal visible={modalKamar} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalCard}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Pilih Kamar Kosong</Text>
+
+                <TouchableOpacity onPress={() => setModalKamar(false)}>
+                  <X size={22} color="#0F172A" />
+                </TouchableOpacity>
+              </View>
+
+              <FlatList
+                data={editId ? kamar : kamarKosong}
+                keyExtractor={(item) => item.id.toString()}
+                ListEmptyComponent={
+                  <Text style={styles.empty}>
+                    Tidak ada kamar kosong tersedia.
+                  </Text>
+                }
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.optionItem}
+                    onPress={() => pilihKamar(item)}
+                  >
+                    <Text style={styles.optionTitle}>Kamar {item.nomor}</Text>
+                    <Text style={styles.optionText}>
+                      Rp {item.harga.toLocaleString("id-ID")} / bulan
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </View>
+        </Modal>
       </View>
     </ProtectedRoute>
   );
@@ -323,14 +421,8 @@ function InfoRow({ Icon, label }) {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    backgroundColor: "#F8FAFC",
-  },
-  container: {
-    flex: 1,
-    padding: 24,
-  },
+  wrapper: { flex: 1, backgroundColor: "#F8FAFC" },
+  container: { flex: 1, padding: 24 },
   header: {
     marginTop: 45,
     marginBottom: 20,
@@ -348,9 +440,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 12,
   },
-  headerText: {
-    flex: 1,
-  },
+  headerText: { flex: 1 },
   headerIcon: {
     width: 48,
     height: 48,
@@ -359,19 +449,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 26,
-    fontWeight: "bold",
-    color: "#0F172A",
-  },
-  subtitle: {
-    color: "#64748B",
-    marginTop: 3,
-    fontSize: 13,
-  },
-  listContent: {
-    paddingBottom: 30,
-  },
+  title: { fontSize: 26, fontWeight: "bold", color: "#0F172A" },
+  subtitle: { color: "#64748B", marginTop: 3, fontSize: 13 },
+  listContent: { paddingBottom: 30 },
   card: {
     backgroundColor: "#FFFFFF",
     borderRadius: 24,
@@ -392,9 +472,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E2E8F0",
     marginRight: 14,
   },
-  profileInfo: {
-    flex: 1,
-  },
+  profileInfo: { flex: 1 },
   name: {
     fontWeight: "bold",
     fontSize: 18,
@@ -407,22 +485,11 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 999,
   },
-  badgeActive: {
-    backgroundColor: "#DCFCE7",
-  },
-  badgePending: {
-    backgroundColor: "#FEF3C7",
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-  badgeTextActive: {
-    color: "#16A34A",
-  },
-  badgeTextPending: {
-    color: "#D97706",
-  },
+  badgeActive: { backgroundColor: "#DCFCE7" },
+  badgePending: { backgroundColor: "#FEF3C7" },
+  badgeText: { fontSize: 12, fontWeight: "bold" },
+  badgeTextActive: { color: "#16A34A" },
+  badgeTextPending: { color: "#D97706" },
   infoBox: {
     backgroundColor: "#F8FAFC",
     borderRadius: 18,
@@ -488,6 +555,21 @@ const styles = StyleSheet.create({
     borderColor: "#CBD5E1",
     marginBottom: 10,
   },
+  selectBox: {
+    backgroundColor: "#FFFFFF",
+    padding: 13,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "#CBD5E1",
+    marginBottom: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  selectText: {
+    color: "#0F172A",
+    flex: 1,
+  },
   saveButton: {
     backgroundColor: "#16A34A",
     padding: 13,
@@ -538,4 +620,74 @@ const styles = StyleSheet.create({
     marginTop: 6,
     color: "#64748B",
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(15,23,42,0.35)",
+    justifyContent: "center",
+    padding: 24,
+  },
+  modalCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 24,
+    padding: 16,
+    maxHeight: "75%",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#0F172A",
+  },
+  optionItem: {
+    backgroundColor: "#F8FAFC",
+    padding: 14,
+    borderRadius: 16,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  optionTitle: {
+    fontWeight: "bold",
+    color: "#0F172A",
+    fontSize: 16,
+  },
+  optionText: {
+    color: "#64748B",
+    marginTop: 3,
+  },
+  searchBox: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    paddingHorizontal: 14,
+    marginBottom: 14,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 13,
+    marginLeft: 10,
+    color: "#0F172A",
+  },
+historyButton: {
+  backgroundColor: "#2563EB",
+  paddingHorizontal: 12,
+  paddingVertical: 8,
+  borderRadius: 10,
+  alignSelf: "flex-start",
+  marginTop: 10,
+},
+
+historyText: {
+  color: "#FFFFFF",
+  fontWeight: "600",
+  fontSize: 13,
+},
 });

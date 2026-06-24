@@ -25,7 +25,17 @@ import { useApp } from "../../context/AppContext";
 export default function ProfileUser() {
   const { user, penghuni } = useApp();
 
-  const dataPenghuni = penghuni.find((item) => item.email === user?.email);
+  const dataPenghuni =
+  penghuni.find((item) => item.email === user?.email) || user || {};
+
+  const nama = dataPenghuni.nama || dataPenghuni.name || "-";
+  const email = dataPenghuni.email || "-";
+  const noHp = dataPenghuni.noHp || dataPenghuni.phone || "-";
+  const alamat = dataPenghuni.alamat || dataPenghuni.address || "-";
+  const kamar =
+    dataPenghuni.kamar || dataPenghuni.room_number || user?.kamar || "-";
+  const status = dataPenghuni.status || "-";
+  const foto = dataPenghuni.foto || dataPenghuni.photo || "";
 
   return (
     <ProtectedRoute role="user">
@@ -56,18 +66,18 @@ export default function ProfileUser() {
             <Image
               source={{
                 uri:
-                  dataPenghuni?.foto ||
+                  foto ||
                   "https://via.placeholder.com/150",
               }}
               style={styles.photo}
             />
 
-            <Text style={styles.name}>{dataPenghuni?.nama || "-"}</Text>
+            <Text style={styles.name}>{nama}</Text>
 
             <View
               style={[
                 styles.badge,
-                dataPenghuni?.status === "Aktif"
+                status === "Aktif"
                   ? styles.badgeActive
                   : styles.badgePending,
               ]}
@@ -75,22 +85,22 @@ export default function ProfileUser() {
               <Text
                 style={[
                   styles.badgeText,
-                  dataPenghuni?.status === "Aktif"
+                  status === "Aktif"
                     ? styles.badgeTextActive
                     : styles.badgeTextPending,
                 ]}
               >
-                {dataPenghuni?.status || "-"}
+                {status || "-"}
               </Text>
             </View>
           </View>
 
           <View style={styles.infoCard}>
-            <InfoRow Icon={Mail} label="Email" value={dataPenghuni?.email || "-"} />
-            <InfoRow Icon={Phone} label="No HP" value={dataPenghuni?.noHp || "-"} />
-            <InfoRow Icon={MapPin} label="Alamat" value={dataPenghuni?.alamat || "-"} />
-            <InfoRow Icon={DoorOpen} label="Kamar" value={`Kamar ${dataPenghuni?.kamar || "-"}`} />
-            <InfoRow Icon={ShieldCheck} label="Status" value={dataPenghuni?.status || "-"} />
+            <InfoRow Icon={Mail} label="Email" value={email} />
+            <InfoRow Icon={Phone} label="No HP" value={noHp} />
+            <InfoRow Icon={MapPin} label="Alamat" value={alamat} />
+            <InfoRow Icon={DoorOpen} label="Kamar" value={`Kamar ${kamar}`} />
+            <InfoRow Icon={ShieldCheck} label="Status" value={status} />
           </View>
           </ScrollView>
           <UserBottomTabs />

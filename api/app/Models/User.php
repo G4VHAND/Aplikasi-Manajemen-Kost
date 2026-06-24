@@ -20,6 +20,7 @@ class User extends Authenticatable
         'photo',
         'room_number',
         'status',
+        'exit_date',
     ];
 
     protected $hidden = [

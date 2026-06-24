@@ -14,6 +14,18 @@ import {
   View,
 } from "react-native";
 
+import {
+  ArrowLeft,
+  Camera,
+  Home,
+  Lock,
+  Mail,
+  MapPin,
+  Phone,
+  User,
+  UserPlus,
+} from "lucide-react-native";
+
 import { useApp } from "../context/AppContext";
 
 export default function RegisterScreen() {
@@ -28,9 +40,8 @@ export default function RegisterScreen() {
 
   const pilihFoto = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
       allowsEditing: true,
+      quality: 0.8,
     });
 
     if (!result.canceled) {
@@ -75,10 +86,23 @@ export default function RegisterScreen() {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>Daftar Penghuni</Text>
-        <Text style={styles.subtitle}>
-          Lengkapi data diri untuk registrasi kost
-        </Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.replace("/login")}
+        >
+          <ArrowLeft size={20} color="#0F172A" />
+        </TouchableOpacity>
+
+        <View style={styles.hero}>
+          <View style={styles.logoBox}>
+            <Home size={34} color="#2563EB" />
+          </View>
+
+          <Text style={styles.title}>Daftar Penghuni</Text>
+          <Text style={styles.subtitle}>
+            Lengkapi data diri untuk mengajukan akun penghuni kost
+          </Text>
+        </View>
 
         <View style={styles.card}>
           <TouchableOpacity style={styles.photoBox} onPress={pilihFoto}>
@@ -86,23 +110,23 @@ export default function RegisterScreen() {
               <Image source={{ uri: foto }} style={styles.photo} />
             ) : (
               <View style={styles.photoPlaceholder}>
-                <Text style={styles.photoIcon}>📷</Text>
+                <Camera size={30} color="#2563EB" />
                 <Text style={styles.photoText}>Pilih Foto</Text>
               </View>
             )}
           </TouchableOpacity>
 
-          <Text style={styles.label}>Nama Lengkap</Text>
-          <TextInput
-            style={styles.input}
+          <InputField
+            Icon={User}
+            label="Nama Lengkap"
             placeholder="Masukkan nama lengkap"
             value={nama}
             onChangeText={setNama}
           />
 
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.input}
+          <InputField
+            Icon={Mail}
+            label="Email"
             placeholder="Masukkan email"
             value={email}
             onChangeText={setEmail}
@@ -110,26 +134,26 @@ export default function RegisterScreen() {
             autoCapitalize="none"
           />
 
-          <Text style={styles.label}>Nomor HP</Text>
-          <TextInput
-            style={styles.input}
+          <InputField
+            Icon={Phone}
+            label="Nomor HP"
             placeholder="Masukkan nomor HP"
             value={noHp}
             onChangeText={setNoHp}
             keyboardType="phone-pad"
           />
 
-          <Text style={styles.label}>Alamat Asal</Text>
-          <TextInput
-            style={styles.input}
+          <InputField
+            Icon={MapPin}
+            label="Alamat Asal"
             placeholder="Masukkan alamat asal"
             value={alamat}
             onChangeText={setAlamat}
           />
 
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
+          <InputField
+            Icon={Lock}
+            label="Password"
             placeholder="Buat password"
             value={password}
             onChangeText={setPassword}
@@ -137,15 +161,35 @@ export default function RegisterScreen() {
           />
 
           <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <UserPlus size={19} color="#FFFFFF" />
             <Text style={styles.buttonText}>Daftar Sekarang</Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={() => router.replace("/login")}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => router.replace("/login")}
+        >
           <Text style={styles.loginText}>Sudah punya akun? Masuk</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
+  );
+}
+
+function InputField({ Icon, label, ...props }) {
+  return (
+    <View>
+      <Text style={styles.label}>{label}</Text>
+      <View style={styles.inputWrapper}>
+        <Icon size={19} color="#64748B" />
+        <TextInput
+          style={styles.input}
+          placeholderTextColor="#94A3B8"
+          {...props}
+        />
+      </View>
+    </View>
   );
 }
 
@@ -156,8 +200,34 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 24,
-    paddingTop: 60,
+    paddingTop: 54,
     paddingBottom: 40,
+  },
+  backButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 16,
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 18,
+  },
+  hero: {
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  logoBox: {
+    width: 76,
+    height: 76,
+    borderRadius: 24,
+    backgroundColor: "#DBEAFE",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: "#BFDBFE",
   },
   title: {
     fontSize: 32,
@@ -168,69 +238,86 @@ const styles = StyleSheet.create({
   subtitle: {
     color: "#64748B",
     textAlign: "center",
-    marginTop: 6,
-    marginBottom: 24,
+    marginTop: 8,
+    lineHeight: 20,
+    paddingHorizontal: 10,
   },
   card: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 24,
-    padding: 20,
+    borderRadius: 28,
+    padding: 22,
     borderWidth: 1,
     borderColor: "#E2E8F0",
   },
   photoBox: {
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: 22,
   },
   photo: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
+    width: 116,
+    height: 116,
+    borderRadius: 38,
+    backgroundColor: "#E2E8F0",
   },
   photoPlaceholder: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
+    width: 116,
+    height: 116,
+    borderRadius: 38,
     backgroundColor: "#DBEAFE",
     alignItems: "center",
     justifyContent: "center",
-  },
-  photoIcon: {
-    fontSize: 28,
+    borderWidth: 1,
+    borderColor: "#BFDBFE",
   },
   photoText: {
     color: "#2563EB",
-    fontWeight: "700",
-    marginTop: 4,
+    fontWeight: "800",
+    marginTop: 6,
+    fontSize: 13,
   },
   label: {
-    fontWeight: "600",
+    fontWeight: "700",
     color: "#0F172A",
-    marginBottom: 6,
+    marginBottom: 7,
   },
-  input: {
+  inputWrapper: {
     backgroundColor: "#F8FAFC",
-    padding: 14,
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: "#CBD5E1",
-    marginBottom: 14,
+    marginBottom: 15,
+    paddingHorizontal: 14,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 15,
+    marginLeft: 10,
+    color: "#0F172A",
   },
   button: {
     backgroundColor: "#2563EB",
-    padding: 15,
-    borderRadius: 16,
+    padding: 16,
+    borderRadius: 18,
     marginTop: 6,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
   },
   buttonText: {
     color: "#FFFFFF",
     textAlign: "center",
     fontWeight: "bold",
+    fontSize: 15,
+  },
+  loginButton: {
+    marginTop: 22,
   },
   loginText: {
     textAlign: "center",
     color: "#2563EB",
-    fontWeight: "700",
-    marginTop: 20,
+    fontWeight: "800",
   },
 });

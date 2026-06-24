@@ -12,6 +12,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::where('role', 'user')
+            ->where('status', '!=', 'Keluar')
             ->latest()
             ->get();
 
@@ -49,10 +50,60 @@ class UserController extends Controller
                 ->update(['status' => 'Kosong']);
         }
 
-        $user->delete();
+        $user->update([
+            'status' => 'Keluar',
+            'room_number' => null,
+            'exit_date' => now()
+        ]);
 
         return response()->json([
-            'message' => 'Penghuni berhasil dihapus dan kamar dikosongkan',
+            'message' => 'Penghuni ditandai keluar dan kamar dikosongkan',
         ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'phone' => 'required|string',
+            'address' => 'required|string',
+            'room_number' => 'required|string',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $oldRoom = $user->room_number;
+        $newRoom = $request->room_number;
+
+        if ($oldRoom && $oldRoom !== $newRoom) {
+            Room::where('number', $oldRoom)->update([
+                'status' => 'Kosong',
+            ]);
+
+            Room::where('number', $newRoom)->update([
+                'status' => 'Terisi',
+            ]);
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'room_number' => $newRoom,
+        ]);
+
+        return response()->json([
+            'message' => 'Data penghuni berhasil diperbarui',
+            'user' => $user,
+        ]);
+    }
+    public function history()
+    {
+        $users = User::where('role', 'user')
+            ->where('status', 'Keluar')
+            ->latest('exit_date')
+            ->get();
+
+        return response()->json($users);
     }
 }

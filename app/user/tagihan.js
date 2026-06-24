@@ -1,11 +1,13 @@
 import * as ImagePicker from "expo-image-picker";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import {
   Alert,
   FlatList,
   Image,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -27,21 +29,60 @@ import { useApp } from "../../context/AppContext";
 import { STORAGE_URL } from "../../services/api";
 
 export default function TagihanUser() {
-  const { pembayaran, user, ajukanPembayaran } = useApp();
+  const { pembayaran, user, ajukanPembayaran, refreshData } = useApp();
+  const [nominalBayar, setNominalBayar] = useState({});
 
-  const tagihanUser = pembayaran.filter((item) => item.nama === user?.nama);
+  const tagihanUser = pembayaran.filter((item) => item.user_id === user?.id);
 
-  const bayarTunai = async (id) => {
+  useFocusEffect(
+    useCallback(() => {
+      refreshData();
+    }, [])
+  );
+
+  const getNominal = (item) => {
+    const value = nominalBayar[item.id];
+    return Number(value || 0);
+  };
+
+  const validasiNominal = (item) => {
+    const nominal = getNominal(item);
+
+    if (!nominal || nominal <= 0) {
+      Alert.alert("Peringatan", "Masukkan nominal pembayaran terlebih dahulu");
+      return null;
+    }
+
+    const batasBayar =
+      item.status === "Kurang Bayar"
+        ? item.remaining_amount
+        : item.jumlah;
+
+    if (nominal > batasBayar) {
+      Alert.alert("Peringatan", "Nominal pembayaran melebihi sisa tagihan");
+      return null;
+    }
+
+    return nominal;
+  };
+
+  const bayarTunai = async (item) => {
+    const nominal = validasiNominal(item);
+    if (!nominal) return;
+
     try {
-      await ajukanPembayaran(id, "Tunai");
+      await ajukanPembayaran(item.id, "Tunai", nominal);
       Alert.alert("Berhasil", "Pembayaran tunai menunggu verifikasi admin");
     } catch (error) {
+      console.log("TUNAI ERROR:", error?.response?.data || error.message);
       Alert.alert("Gagal", "Gagal mengajukan pembayaran tunai");
     }
   };
 
-  const uploadBuktiTransfer = async (id) => {
-  try {
+  const uploadBuktiTransfer = async (item) => {
+    const nominal = validasiNominal(item);
+    if (!nominal) return;
+
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 0.7,
@@ -49,24 +90,14 @@ export default function TagihanUser() {
 
     if (result.canceled) return;
 
-    const image = result.assets[0];
-
-    console.log("IMAGE PICKER RESULT:", image);
-
-    await ajukanPembayaran(id, "Transfer", image);
-
-    Alert.alert("Berhasil", "Bukti transfer berhasil dikirim");
-  } catch (error) {
-    console.log("UPLOAD ERROR FULL:", error);
-    console.log("UPLOAD ERROR RESPONSE:", error?.response?.data);
-    console.log("UPLOAD ERROR MESSAGE:", error?.message);
-
-    Alert.alert(
-      "Upload Gagal",
-      JSON.stringify(error?.response?.data || error?.message || error)
-    );
-  }
-};
+    try {
+      await ajukanPembayaran(item.id, "Transfer", nominal, result.assets[0]);
+      Alert.alert("Berhasil", "Bukti transfer berhasil dikirim");
+    } catch (error) {
+      console.log("TRANSFER ERROR:", error?.response?.data || error.message);
+      Alert.alert("Gagal", "Upload bukti pembayaran gagal");
+    }
+  };
 
   return (
     <ProtectedRoute role="user">
@@ -104,110 +135,165 @@ export default function TagihanUser() {
                 </Text>
               </View>
             }
-            renderItem={({ item }) => (
-              <View style={styles.card}>
-                <View style={styles.paymentHeader}>
-                  <View style={styles.paymentIcon}>
-                    <Wallet size={26} color="#2563EB" />
-                  </View>
+            renderItem={({ item }) => {
+              const nominalInput = getNominal(item);
+              const sisaPreview =
+                nominalInput > 0 ? item.jumlah - nominalInput : item.jumlah;
 
-                  <View style={styles.paymentInfo}>
-                    <Text style={styles.month}>{item.bulan}</Text>
-                    <Text style={styles.name}>{item.nama}</Text>
-                  </View>
+              return (
+                <View style={styles.card}>
+                  <View style={styles.paymentHeader}>
+                    <View style={styles.paymentIcon}>
+                      <Wallet size={26} color="#2563EB" />
+                    </View>
 
-                  <View
-                    style={[
-                      styles.badge,
-                      item.status === "Lunas"
-                        ? styles.badgePaid
-                        : item.status === "Menunggu Verifikasi"
-                        ? styles.badgeVerify
-                        : styles.badgeUnpaid,
-                    ]}
-                  >
-                    <Text
+                    <View style={styles.paymentInfo}>
+                      <Text style={styles.month}>{item.bulan}</Text>
+                      <Text style={styles.name}>{item.nama}</Text>
+                    </View>
+
+                    <View
                       style={[
-                        styles.badgeText,
+                        styles.badge,
                         item.status === "Lunas"
-                          ? styles.badgeTextPaid
+                          ? styles.badgePaid
                           : item.status === "Menunggu Verifikasi"
-                          ? styles.badgeTextVerify
-                          : styles.badgeTextUnpaid,
+                          ? styles.badgeVerify
+                          : item.status === "Kurang Bayar"
+                          ? styles.badgeLess
+                          : styles.badgeUnpaid,
                       ]}
                     >
-                      {item.status}
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={styles.amountBox}>
-                  <Text style={styles.amountLabel}>Jumlah Tagihan</Text>
-                  <Text style={styles.amountValue}>
-                    Rp {item.jumlah.toLocaleString("id-ID")}
-                  </Text>
-
-                  <View style={styles.infoRow}>
-                    <User size={17} color="#64748B" />
-                    <Text style={styles.infoText}>Nama: {item.nama}</Text>
-                  </View>
-
-                  <Text style={styles.methodText}>
-                    Metode: {item.metode || "-"}
-                  </Text>
-                </View>
-
-                {item.proof && (
-                  <View style={styles.proofBox}>
-                    <Text style={styles.proofTitle}>Bukti Pembayaran</Text>
-                    <Image
-                      source={{ uri: `${STORAGE_URL}/${item.proof}` }}
-                      style={styles.proofImage}
-                    />
-                  </View>
-                )}
-
-                {item.status === "Belum Bayar" && (
-                  <View>
-                    <TouchableOpacity
-                      style={styles.cashButton}
-                      onPress={() => bayarTunai(item.id)}
-                    >
-                      <Banknote size={18} color="#FFFFFF" />
-                      <Text style={styles.buttonText}>Bayar Tunai</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={styles.transferButton}
-                      onPress={() => uploadBuktiTransfer(item.id)}
-                    >
-                      <Upload size={18} color="#FFFFFF" />
-                      <Text style={styles.buttonText}>
-                        Upload Bukti Transfer
+                      <Text
+                        style={[
+                          styles.badgeText,
+                          item.status === "Lunas"
+                            ? styles.badgeTextPaid
+                            : item.status === "Menunggu Verifikasi"
+                            ? styles.badgeTextVerify
+                            : item.status === "Kurang Bayar"
+                            ? styles.badgeTextLess
+                            : styles.badgeTextUnpaid,
+                        ]}
+                      >
+                        {item.status}
                       </Text>
-                    </TouchableOpacity>
+                    </View>
                   </View>
-                )}
 
-                {item.status === "Menunggu Verifikasi" && (
-                  <View style={styles.waitingBox}>
-                    <Clock size={18} color="#D97706" />
-                    <Text style={styles.waitingText}>
-                      Menunggu verifikasi admin
+                  <View style={styles.amountBox}>
+                    <Text style={styles.amountLabel}>Total Tagihan</Text>
+                    <Text style={styles.amountValue}>
+                      Rp {item.jumlah.toLocaleString("id-ID")}
+                    </Text>
+
+                    <View style={styles.infoRow}>
+                      <User size={17} color="#64748B" />
+                      <Text style={styles.infoText}>Nama: {item.nama}</Text>
+                    </View>
+
+                    <Text style={styles.methodText}>
+                      Jumlah bulan: {item.month_count || 1} bulan
+                    </Text>
+
+                    <Text style={styles.methodText}>
+                      Dibayar: Rp {(item.paid_amount || 0).toLocaleString("id-ID")}
+                    </Text>
+
+                    <Text style={styles.methodText}>
+                      Sisa:
+                      {item.remaining_amount > 0
+                        ? ` Rp ${item.remaining_amount.toLocaleString("id-ID")}`
+                        : " -"}
+                    </Text>
+
+                    <Text style={styles.methodText}>
+                      Metode: {item.metode || "-"}
                     </Text>
                   </View>
-                )}
 
-                {item.status === "Lunas" && (
-                  <View style={styles.paidBox}>
-                    <CheckCircle size={18} color="#16A34A" />
-                    <Text style={styles.paidText}>
-                      Pembayaran telah dikonfirmasi
-                    </Text>
-                  </View>
-                )}
-              </View>
-            )}
+                  {item.proof && (
+                    <View style={styles.proofBox}>
+                      <Text style={styles.proofTitle}>Bukti Pembayaran</Text>
+                      <Image
+                        source={{ uri: `${STORAGE_URL}/${item.proof}` }}
+                        style={styles.proofImage}
+                      />
+                    </View>
+                  )}
+
+                  {(item.status === "Belum Bayar" || item.status === "Kurang Bayar") && (
+                    <View style={styles.paymentInputBox}>
+                      <Text style={styles.inputLabel}>Nominal Dibayar</Text>
+
+                      <TextInput
+                        style={styles.input}
+                        placeholder="Contoh: 1000000"
+                        keyboardType="numeric"
+                        value={nominalBayar[item.id] || ""}
+                        onChangeText={(value) =>
+                          setNominalBayar({
+                            ...nominalBayar,
+                            [item.id]: value.replace(/[^0-9]/g, ""),
+                          })
+                        }
+                      />
+
+                      <Text style={styles.previewText}>
+                        Perkiraan sisa: Rp{" "}
+                        {Math.max(sisaPreview, 0).toLocaleString("id-ID")}
+                      </Text>
+
+                      <TouchableOpacity
+                        style={styles.cashButton}
+                        onPress={() => bayarTunai(item)}
+                      >
+                        <Banknote size={18} color="#FFFFFF" />
+                        <Text style={styles.buttonText}>Bayar Tunai</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={styles.transferButton}
+                        onPress={() => uploadBuktiTransfer(item)}
+                      >
+                        <Upload size={18} color="#FFFFFF" />
+                        <Text style={styles.buttonText}>
+                          Upload Bukti Transfer
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+
+                  {item.status === "Menunggu Verifikasi" && (
+                    <View style={styles.waitingBox}>
+                      <Clock size={18} color="#D97706" />
+                      <Text style={styles.waitingText}>
+                        Menunggu verifikasi admin
+                      </Text>
+                    </View>
+                  )}
+
+                  {item.status === "Kurang Bayar" && (
+                    <View style={styles.lessBox}>
+                      <Clock size={18} color="#DC2626" />
+                      <Text style={styles.lessText}>
+                        Pembayaran kurang Rp{" "}
+                        {(item.remaining_amount || 0).toLocaleString("id-ID")}
+                      </Text>
+                    </View>
+                  )}
+
+                  {item.status === "Lunas" && (
+                    <View style={styles.paidBox}>
+                      <CheckCircle size={18} color="#16A34A" />
+                      <Text style={styles.paidText}>
+                        Pembayaran telah dikonfirmasi
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              );
+            }}
           />
         </View>
 
@@ -277,10 +363,12 @@ const styles = StyleSheet.create({
   badge: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999 },
   badgePaid: { backgroundColor: "#DCFCE7" },
   badgeVerify: { backgroundColor: "#DBEAFE" },
+  badgeLess: { backgroundColor: "#FEE2E2" },
   badgeUnpaid: { backgroundColor: "#FEF3C7" },
   badgeText: { fontSize: 12, fontWeight: "bold" },
   badgeTextPaid: { color: "#16A34A" },
   badgeTextVerify: { color: "#2563EB" },
+  badgeTextLess: { color: "#DC2626" },
   badgeTextUnpaid: { color: "#D97706" },
   amountBox: {
     backgroundColor: "#F8FAFC",
@@ -315,6 +403,29 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     backgroundColor: "#E2E8F0",
   },
+  paymentInputBox: {
+    backgroundColor: "#F8FAFC",
+    padding: 14,
+    borderRadius: 18,
+  },
+  inputLabel: {
+    fontWeight: "bold",
+    color: "#0F172A",
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#CBD5E1",
+    padding: 13,
+    borderRadius: 14,
+    marginBottom: 8,
+  },
+  previewText: {
+    color: "#64748B",
+    marginBottom: 12,
+    fontWeight: "600",
+  },
   cashButton: {
     backgroundColor: "#16A34A",
     padding: 13,
@@ -323,7 +434,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
-    marginTop: 4,
   },
   transferButton: {
     backgroundColor: "#2563EB",
@@ -346,6 +456,16 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   waitingText: { color: "#D97706", fontWeight: "bold" },
+  lessBox: {
+    backgroundColor: "#FEE2E2",
+    padding: 13,
+    borderRadius: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  lessText: { color: "#DC2626", fontWeight: "bold" },
   paidBox: {
     backgroundColor: "#DCFCE7",
     padding: 13,
