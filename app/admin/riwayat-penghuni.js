@@ -32,7 +32,7 @@ export default function RiwayatPenghuni() {
               style={styles.backButton}
               onPress={() => router.back()}
             >
-              <ArrowLeft size={22} color="#0F172A" />
+              <ArrowLeft size={22} color="#1B2A47" />
             </TouchableOpacity>
 
             <Text style={styles.title}>Riwayat Penghuni</Text>
@@ -40,7 +40,7 @@ export default function RiwayatPenghuni() {
 
           {riwayatPenghuni.length === 0 ? (
             <View style={styles.emptyCard}>
-              <UserX size={42} color="#94A3B8" />
+              <UserX size={42} color="#9AACC9" />
               <Text style={styles.emptyText}>
                 Belum ada penghuni keluar
               </Text>
@@ -51,14 +51,14 @@ export default function RiwayatPenghuni() {
                 <Text style={styles.nama}>{item.nama}</Text>
 
                 <View style={styles.row}>
-                  <DoorOpen size={18} color="#64748B" />
+                  <DoorOpen size={18} color="#6B7A94" />
                   <Text style={styles.value}>
                     Kamar Terakhir: {item.kamar || "-"}
                   </Text>
                 </View>
 
                 <View style={styles.row}>
-                  <CalendarDays size={18} color="#64748B" />
+                  <CalendarDays size={18} color="#6B7A94" />
                   <Text style={styles.value}>
                     Keluar:
                     {" "}
@@ -85,7 +85,7 @@ export default function RiwayatPenghuni() {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
   },
   container: {
     flex: 1,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   card: {
     backgroundColor: "#FFFFFF",
@@ -111,12 +111,12 @@ const styles = StyleSheet.create({
     padding: 18,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   nama: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 12,
   },
   row: {
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   value: {
-    color: "#475569",
+    color: "#5A6B8C",
   },
   badge: {
     marginTop: 10,
@@ -149,6 +149,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     marginTop: 10,
-    color: "#64748B",
+    color: "#6B7A94",
   },
 });

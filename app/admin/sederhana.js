@@ -33,7 +33,7 @@ export default function AdminSederhana() {
           style={styles.menuButton}
           onPress={() => router.push("/admin/penghuni?from=sederhana")}
         >
-          <Users size={34} color="#2563EB" />
+          <Users size={34} color="#4F8EF7" />
           <Text style={styles.menuText}>
             Data Penghuni
           </Text>
@@ -95,7 +95,7 @@ export default function AdminSederhana() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 24,
     justifyContent: "center",
   },
@@ -104,12 +104,12 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
 
   subtitle: {
     textAlign: "center",
-    color: "#64748B",
+    color: "#6B7A94",
     marginTop: 8,
     marginBottom: 30,
     fontSize: 16,
@@ -124,14 +124,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
 
   menuText: {
     marginLeft: 18,
     fontSize: 22,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
 
   logoutButton: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
 
   backText: {
     textAlign: "center",
-    color: "#2563EB",
+    color: "#4F8EF7",
     fontWeight: "bold",
     fontSize: 16,
   },

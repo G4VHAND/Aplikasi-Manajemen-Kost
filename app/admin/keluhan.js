@@ -63,7 +63,7 @@ export default function KeluhanAdmin() {
               style={styles.backIcon}
               onPress={handleBack}
             >
-              <ArrowLeft size={22} color="#0F172A" />
+              <ArrowLeft size={22} color="#1B2A47" />
             </TouchableOpacity>
 
             <View style={styles.headerText}>
@@ -85,7 +85,7 @@ export default function KeluhanAdmin() {
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={
               <View style={styles.emptyBox}>
-                <MessageSquareWarning size={42} color="#94A3B8" />
+                <MessageSquareWarning size={42} color="#9AACC9" />
                 <Text style={styles.emptyTitle}>Belum ada keluhan</Text>
                 <Text style={styles.empty}>
                   Keluhan dari penghuni akan tampil di sini.
@@ -174,7 +174,7 @@ export default function KeluhanAdmin() {
 function InfoRow({ Icon, text }) {
   return (
     <View style={styles.infoRow}>
-      <Icon size={17} color="#64748B" />
+      <Icon size={17} color="#6B7A94" />
       <Text style={styles.infoText}>{text}</Text>
     </View>
   );
@@ -183,7 +183,7 @@ function InfoRow({ Icon, text }) {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
   },
   container: {
     flex: 1,
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -220,10 +220,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   subtitle: {
-    color: "#64748B",
+    color: "#6B7A94",
     marginTop: 3,
     fontSize: 13,
   },
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   complaintHeader: {
     flexDirection: "row",
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 8,
   },
   badge: {
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FEF3C7",
   },
   badgeProcess: {
-    backgroundColor: "#DBEAFE",
+    backgroundColor: "#E6F0FE",
   },
   badgeDone: {
     backgroundColor: "#DCFCE7",
@@ -284,13 +284,13 @@ const styles = StyleSheet.create({
     color: "#D97706",
   },
   badgeTextProcess: {
-    color: "#2563EB",
+    color: "#4F8EF7",
   },
   badgeTextDone: {
     color: "#16A34A",
   },
   infoBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     borderRadius: 18,
     padding: 12,
     marginBottom: 12,
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     marginLeft: 10,
-    color: "#334155",
+    color: "#28395A",
     flex: 1,
     lineHeight: 20,
   },
@@ -350,19 +350,19 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 30,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     marginTop: 20,
   },
   emptyTitle: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginTop: 12,
   },
   empty: {
     textAlign: "center",
     marginTop: 6,
-    color: "#64748B",
+    color: "#6B7A94",
   },
 });

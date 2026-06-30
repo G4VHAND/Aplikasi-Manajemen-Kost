@@ -1,4 +1,5 @@
 import { StyleSheet, View } from "react-native";
+import { COLORS, SIZES } from "../constants/theme";
 
 export default function AppCard({ children, style }) {
   return <View style={[styles.card, style]}>{children}</View>;
@@ -6,11 +7,11 @@ export default function AppCard({ children, style }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     padding: 16,
-    borderRadius: 18,
+    borderRadius: SIZES.radiusSm,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.border,
   },
 });

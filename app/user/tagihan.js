@@ -108,7 +108,7 @@ export default function TagihanUser() {
               style={styles.backIcon}
               onPress={() => router.replace("/user/dashboard")}
             >
-              <ArrowLeft size={22} color="#0F172A" />
+              <ArrowLeft size={22} color="#1B2A47" />
             </TouchableOpacity>
 
             <View style={styles.headerText}>
@@ -117,7 +117,7 @@ export default function TagihanUser() {
             </View>
 
             <View style={styles.headerIcon}>
-              <CreditCard size={24} color="#2563EB" />
+              <CreditCard size={24} color="#4F8EF7" />
             </View>
           </View>
 
@@ -128,7 +128,7 @@ export default function TagihanUser() {
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={
               <View style={styles.emptyBox}>
-                <CreditCard size={42} color="#94A3B8" />
+                <CreditCard size={42} color="#9AACC9" />
                 <Text style={styles.emptyTitle}>Belum ada tagihan</Text>
                 <Text style={styles.empty}>
                   Tagihan pembayaran kost akan tampil di sini.
@@ -144,7 +144,7 @@ export default function TagihanUser() {
                 <View style={styles.card}>
                   <View style={styles.paymentHeader}>
                     <View style={styles.paymentIcon}>
-                      <Wallet size={26} color="#2563EB" />
+                      <Wallet size={26} color="#4F8EF7" />
                     </View>
 
                     <View style={styles.paymentInfo}>
@@ -188,7 +188,7 @@ export default function TagihanUser() {
                     </Text>
 
                     <View style={styles.infoRow}>
-                      <User size={17} color="#64748B" />
+                      <User size={17} color="#6B7A94" />
                       <Text style={styles.infoText}>Nama: {item.nama}</Text>
                     </View>
 
@@ -304,7 +304,7 @@ export default function TagihanUser() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: "#F8FAFC" },
+  wrapper: { flex: 1, backgroundColor: "#EAF2FE" },
   container: { flex: 1, padding: 24 },
   header: {
     marginTop: 45,
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -328,12 +328,12 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 16,
-    backgroundColor: "#DBEAFE",
+    backgroundColor: "#E6F0FE",
     alignItems: "center",
     justifyContent: "center",
   },
-  title: { fontSize: 26, fontWeight: "bold", color: "#0F172A" },
-  subtitle: { color: "#64748B", marginTop: 3, fontSize: 13 },
+  title: { fontSize: 26, fontWeight: "bold", color: "#1B2A47" },
+  subtitle: { color: "#6B7A94", marginTop: 3, fontSize: 13 },
   listContent: { paddingBottom: 30 },
   card: {
     backgroundColor: "#FFFFFF",
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   paymentHeader: {
     flexDirection: "row",
@@ -352,77 +352,77 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 18,
-    backgroundColor: "#DBEAFE",
+    backgroundColor: "#E6F0FE",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
   },
   paymentInfo: { flex: 1 },
-  month: { fontWeight: "bold", fontSize: 18, color: "#0F172A" },
-  name: { color: "#64748B", marginTop: 4 },
+  month: { fontWeight: "bold", fontSize: 18, color: "#1B2A47" },
+  name: { color: "#6B7A94", marginTop: 4 },
   badge: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999 },
   badgePaid: { backgroundColor: "#DCFCE7" },
-  badgeVerify: { backgroundColor: "#DBEAFE" },
+  badgeVerify: { backgroundColor: "#E6F0FE" },
   badgeLess: { backgroundColor: "#FEE2E2" },
   badgeUnpaid: { backgroundColor: "#FEF3C7" },
   badgeText: { fontSize: 12, fontWeight: "bold" },
   badgeTextPaid: { color: "#16A34A" },
-  badgeTextVerify: { color: "#2563EB" },
+  badgeTextVerify: { color: "#4F8EF7" },
   badgeTextLess: { color: "#DC2626" },
   badgeTextUnpaid: { color: "#D97706" },
   amountBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 18,
     marginBottom: 12,
   },
-  amountLabel: { color: "#64748B", fontSize: 13 },
+  amountLabel: { color: "#6B7A94", fontSize: 13 },
   amountValue: {
-    color: "#0F172A",
+    color: "#1B2A47",
     fontSize: 24,
     fontWeight: "bold",
     marginTop: 4,
   },
   infoRow: { flexDirection: "row", alignItems: "center", marginTop: 10 },
-  infoText: { marginLeft: 8, color: "#334155" },
-  methodText: { color: "#64748B", marginTop: 8 },
+  infoText: { marginLeft: 8, color: "#28395A" },
+  methodText: { color: "#6B7A94", marginTop: 8 },
   proofBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 12,
     borderRadius: 16,
     marginBottom: 12,
   },
   proofTitle: {
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 8,
   },
   proofImage: {
     width: "100%",
     height: 190,
     borderRadius: 14,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: "#D9E5FA",
   },
   paymentInputBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 18,
   },
   inputLabel: {
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 8,
   },
   input: {
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: "#C7D7F5",
     padding: 13,
     borderRadius: 14,
     marginBottom: 8,
   },
   previewText: {
-    color: "#64748B",
+    color: "#6B7A94",
     marginBottom: 12,
     fontWeight: "600",
   },
@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   transferButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: "#4F8EF7",
     padding: 13,
     borderRadius: 14,
     flexDirection: "row",
@@ -481,15 +481,15 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 30,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     marginTop: 30,
   },
   emptyTitle: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginTop: 12,
   },
-  empty: { textAlign: "center", marginTop: 6, color: "#64748B" },
+  empty: { textAlign: "center", marginTop: 6, color: "#6B7A94" },
 });

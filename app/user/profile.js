@@ -49,7 +49,7 @@ export default function ProfileUser() {
               style={styles.backIcon}
               onPress={() => router.replace("/user/dashboard")}
             >
-              <ArrowLeft size={22} color="#0F172A" />
+              <ArrowLeft size={22} color="#1B2A47" />
             </TouchableOpacity>
 
             <View style={styles.headerText}>
@@ -127,7 +127,7 @@ function InfoRow({ Icon, label, value }) {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
   },
   container: {
     flex: 1,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -164,10 +164,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   subtitle: {
-    color: "#64748B",
+    color: "#6B7A94",
     marginTop: 3,
     fontSize: 13,
   },
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 26,
     padding: 22,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     marginBottom: 16,
   },
@@ -184,13 +184,13 @@ const styles = StyleSheet.create({
     width: 110,
     height: 110,
     borderRadius: 36,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: "#D9E5FA",
     marginBottom: 14,
   },
   name: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 10,
     textAlign: "center",
   },
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 14,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   infoRow: {
     flexDirection: "row",
@@ -240,11 +240,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   infoLabel: {
-    color: "#64748B",
+    color: "#6B7A94",
     fontSize: 13,
   },
   infoValue: {
-    color: "#0F172A",
+    color: "#1B2A47",
     fontWeight: "bold",
     marginTop: 2,
     fontSize: 15,

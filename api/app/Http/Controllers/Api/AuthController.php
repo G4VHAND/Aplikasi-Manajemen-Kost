@@ -42,7 +42,7 @@ class AuthController extends Controller
             'role' => 'user',
             'phone' => $request->phone,
             'address' => $request->address,
-            'status' => 'Menunggu Konfirmasi',
+            'status' => 'pending',
         ]);
 
         return response()->json([

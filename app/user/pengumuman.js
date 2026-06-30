@@ -29,7 +29,7 @@ export default function PengumumanUser() {
               style={styles.backIcon}
               onPress={() => router.replace("/user/dashboard")}
             >
-              <ArrowLeft size={22} color="#0F172A" />
+              <ArrowLeft size={22} color="#1B2A47" />
             </TouchableOpacity>
 
             <View style={styles.headerText}>
@@ -51,7 +51,7 @@ export default function PengumumanUser() {
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={
               <View style={styles.emptyBox}>
-                <Bell size={42} color="#94A3B8" />
+                <Bell size={42} color="#9AACC9" />
                 <Text style={styles.emptyTitle}>Belum ada pengumuman</Text>
                 <Text style={styles.empty}>
                   Pengumuman dari admin akan tampil di sini.
@@ -84,7 +84,7 @@ export default function PengumumanUser() {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
   },
   container: {
     flex: 1,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -121,10 +121,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   subtitle: {
-    color: "#64748B",
+    color: "#6B7A94",
     marginTop: 3,
     fontSize: 13,
   },
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   announcementHeader: {
     flexDirection: "row",
@@ -158,11 +158,11 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 6,
   },
   desc: {
-    color: "#64748B",
+    color: "#6B7A94",
     lineHeight: 20,
   },
   emptyBox: {
@@ -170,19 +170,19 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 30,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     marginTop: 30,
   },
   emptyTitle: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginTop: 12,
   },
   empty: {
     textAlign: "center",
     marginTop: 6,
-    color: "#64748B",
+    color: "#6B7A94",
   },
 });

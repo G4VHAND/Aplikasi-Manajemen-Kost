@@ -50,7 +50,7 @@ export default function KeluhanUser() {
               style={styles.backIcon}
               onPress={() => router.replace("/user/dashboard")}
             >
-              <ArrowLeft size={22} color="#0F172A" />
+              <ArrowLeft size={22} color="#1B2A47" />
             </TouchableOpacity>
 
             <View style={styles.headerText}>
@@ -92,7 +92,7 @@ export default function KeluhanUser() {
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={
               <View style={styles.emptyBox}>
-                <MessageSquareWarning size={42} color="#94A3B8" />
+                <MessageSquareWarning size={42} color="#9AACC9" />
                 <Text style={styles.emptyTitle}>Belum ada keluhan</Text>
                 <Text style={styles.empty}>
                   Keluhan yang Anda kirim akan tampil di sini.
@@ -168,7 +168,7 @@ export default function KeluhanUser() {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
   },
   container: {
     flex: 1,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -205,10 +205,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   subtitle: {
-    color: "#64748B",
+    color: "#6B7A94",
     marginTop: 3,
     fontSize: 13,
   },
@@ -217,27 +217,27 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     marginBottom: 20,
   },
   formTitle: {
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 12,
     fontSize: 16,
   },
   textarea: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 13,
     borderRadius: 14,
     height: 130,
     textAlignVertical: "top",
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: "#C7D7F5",
     marginBottom: 12,
   },
   sendButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: "#4F8EF7",
     padding: 14,
     borderRadius: 14,
     flexDirection: "row",
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 12,
   },
   listContent: {
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   complaintHeader: {
     flexDirection: "row",
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   complaintTitle: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 8,
   },
   badge: {
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FEF3C7",
   },
   badgeProcess: {
-    backgroundColor: "#DBEAFE",
+    backgroundColor: "#E6F0FE",
   },
   badgeDone: {
     backgroundColor: "#DCFCE7",
@@ -308,19 +308,19 @@ const styles = StyleSheet.create({
     color: "#D97706",
   },
   badgeTextProcess: {
-    color: "#2563EB",
+    color: "#4F8EF7",
   },
   badgeTextDone: {
     color: "#16A34A",
   },
   messageBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 18,
     marginBottom: 12,
   },
   messageText: {
-    color: "#334155",
+    color: "#28395A",
     lineHeight: 20,
   },
   statusBoxWaiting: {
@@ -359,19 +359,19 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 30,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     marginTop: 20,
   },
   emptyTitle: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginTop: 12,
   },
   empty: {
     textAlign: "center",
     marginTop: 6,
-    color: "#64748B",
+    color: "#6B7A94",
   },
 });

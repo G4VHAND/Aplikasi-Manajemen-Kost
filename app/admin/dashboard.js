@@ -24,6 +24,7 @@ import {
 import AdminBottomTabs from "../../components/AdminBottomTabs";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useApp } from "../../context/AppContext";
+import { COLORS } from "../../constants/theme";
 
 export default function AdminDashboard() {
   const { resetData, penghuni, kamar, pembayaran, keluhan } = useApp();
@@ -75,18 +76,22 @@ export default function AdminDashboard() {
             </View>
 
             <View style={styles.avatar}>
-              <UserCheck size={26} color="#2563EB" />
+              <UserCheck size={26} color={COLORS.primaryDark} />
             </View>
           </View>
 
+          {/* Hero card: biru cerah + aksen lingkaran biru muda & pink */}
           <View style={styles.heroCard}>
+            <View style={styles.heroDecorBig} />
+            <View style={styles.heroDecorSmall} />
+
             <View style={styles.heroTop}>
               <View style={styles.heroIcon}>
-                <Wallet size={30} color="#FFFFFF" />
+                <Wallet size={22} color={COLORS.primaryDark} />
               </View>
 
               <View style={styles.heroBadge}>
-                <Sparkles size={14} color="#DBEAFE" />
+                <Sparkles size={14} color={COLORS.primaryLight} />
                 <Text style={styles.heroBadgeText}>KostKu</Text>
               </View>
             </View>
@@ -106,7 +111,7 @@ export default function AdminDashboard() {
               onPress={() => router.push("/admin/pembayaran")}
             >
               <View style={styles.noticeIcon}>
-                <CreditCard size={24} color="#D97706" />
+                <CreditCard size={22} color={COLORS.accentDark} />
               </View>
 
               <View style={styles.noticeContent}>
@@ -118,7 +123,7 @@ export default function AdminDashboard() {
                 </Text>
               </View>
 
-              <ArrowRight size={22} color="#D97706" />
+              <ArrowRight size={22} color={COLORS.accentDark} />
             </TouchableOpacity>
           )}
 
@@ -130,56 +135,56 @@ export default function AdminDashboard() {
           <View style={styles.grid}>
             <StatCard
               Icon={Users}
-              color="#2563EB"
+              tone="blue"
               value={totalPenghuni}
               label="Total Penghuni"
             />
 
             <StatCard
               Icon={UserCheck}
-              color="#16A34A"
+              tone="blue"
               value={penghuniAktif}
               label="Penghuni Aktif"
             />
 
             <StatCard
               Icon={DoorOpen}
-              color="#F59E0B"
+              tone="pink"
               value={kamarKosong}
               label="Kamar Kosong"
             />
 
             <StatCard
               Icon={DoorOpen}
-              color="#8B5CF6"
+              tone="blue"
               value={kamarTerisi}
               label="Kamar Terisi"
             />
 
             <StatCard
               Icon={CreditCard}
-              color="#EF4444"
+              tone="pink"
               value={belumBayar}
               label="Tagihan Aktif"
             />
 
             <StatCard
               Icon={CreditCard}
-              color="#2563EB"
+              tone="pink"
               value={menungguVerifikasi}
               label="Menunggu Verifikasi"
             />
 
             <StatCard
               Icon={Wallet}
-              color="#DC2626"
+              tone="pink"
               value={`Rp ${totalTunggakan.toLocaleString("id-ID")}`}
               label="Total Tunggakan"
             />
 
             <StatCard
               Icon={Wrench}
-              color="#0EA5E9"
+              tone="blue"
               value={keluhanAktif}
               label="Keluhan Aktif"
             />
@@ -190,7 +195,7 @@ export default function AdminDashboard() {
             onPress={() => router.push("/admin/sederhana")}
           >
             <View style={styles.simpleIcon}>
-              <Eye size={24} color="#FFFFFF" />
+              <Eye size={22} color={COLORS.white} />
             </View>
 
             <View style={styles.simpleContent}>
@@ -200,11 +205,11 @@ export default function AdminDashboard() {
               </Text>
             </View>
 
-            <ArrowRight size={22} color="#FFFFFF" />
+            <ArrowRight size={22} color={COLORS.white} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
-            <RotateCcw size={18} color="#FFFFFF" />
+            <RotateCcw size={18} color={COLORS.white} />
             <Text style={styles.resetText}>Reset Data Lokal</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -215,11 +220,17 @@ export default function AdminDashboard() {
   );
 }
 
-function StatCard({ Icon, color, value, label }) {
+const TONES = {
+  blue: { tint: COLORS.primaryTint, border: COLORS.primary, icon: COLORS.primaryDark },
+  pink: { tint: COLORS.accentTint, border: COLORS.accent, icon: COLORS.accentDark },
+};
+
+function StatCard({ Icon, tone = "blue", value, label }) {
+  const t = TONES[tone];
   return (
     <View style={styles.statCard}>
-      <View style={styles.statIconBox}>
-        <Icon size={25} color={color} />
+      <View style={[styles.statIconBox, { backgroundColor: t.tint, borderColor: t.border }]}>
+        <Icon size={22} color={t.icon} />
       </View>
 
       <Text style={styles.statValue}>{value}</Text>
@@ -231,7 +242,7 @@ function StatCard({ Icon, color, value, label }) {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.background,
   },
   container: {
     flex: 1,
@@ -248,90 +259,117 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   greeting: {
-    color: "#64748B",
-    fontSize: 15,
+    color: COLORS.gray,
+    fontSize: 14,
   },
   title: {
-    fontSize: 31,
-    fontWeight: "bold",
-    color: "#0F172A",
+    fontSize: 26,
+    fontWeight: "600",
+    color: COLORS.dark,
     marginTop: 4,
   },
   avatar: {
-    width: 56,
-    height: 56,
-    borderRadius: 20,
-    backgroundColor: "#DBEAFE",
+    width: 52,
+    height: 52,
+    borderRadius: 18,
+    backgroundColor: COLORS.white,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "#BFDBFE",
+    borderWidth: 1.5,
+    borderColor: COLORS.primaryLight,
   },
   heroCard: {
-    backgroundColor: "#2563EB",
-    borderRadius: 30,
-    padding: 24,
+    backgroundColor: COLORS.primary,
+    borderRadius: 18,
+    padding: 20,
     marginBottom: 18,
+    borderWidth: 1.5,
+    borderColor: COLORS.primaryDark,
+    overflow: "hidden",
+  },
+  heroDecorBig: {
+    position: "absolute",
+    top: -30,
+    right: -30,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    backgroundColor: COLORS.primaryLight,
+    opacity: 0.6,
+  },
+  heroDecorSmall: {
+    position: "absolute",
+    bottom: -24,
+    right: 14,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: COLORS.accent,
+    opacity: 0.85,
   },
   heroTop: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 18,
+    marginBottom: 16,
   },
   heroIcon: {
-    width: 54,
-    height: 54,
-    borderRadius: 18,
-    backgroundColor: "rgba(255,255,255,0.18)",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.white,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1.5,
+    borderColor: COLORS.primaryLight,
   },
   heroBadge: {
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
-    backgroundColor: "rgba(255,255,255,0.14)",
+    backgroundColor: "rgba(255,255,255,0.18)",
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 999,
   },
   heroBadgeText: {
-    color: "#DBEAFE",
-    fontWeight: "bold",
+    color: COLORS.white,
+    fontWeight: "600",
     fontSize: 12,
   },
   heroLabel: {
-    color: "#DBEAFE",
-    fontSize: 14,
+    color: "rgba(255,255,255,0.85)",
+    fontSize: 13,
   },
   heroValue: {
-    color: "#FFFFFF",
-    fontSize: 31,
-    fontWeight: "bold",
-    marginTop: 8,
+    color: COLORS.white,
+    fontSize: 26,
+    fontWeight: "600",
+    marginTop: 6,
   },
   heroNote: {
-    color: "#BFDBFE",
+    color: "rgba(255,255,255,0.75)",
     marginTop: 8,
     fontSize: 12,
     lineHeight: 18,
   },
   noticeCard: {
-    backgroundColor: "#FEF3C7",
-    borderRadius: 24,
-    padding: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    padding: 14,
     marginBottom: 22,
-    borderWidth: 1,
-    borderColor: "#FCD34D",
+    borderWidth: 1.5,
+    borderColor: COLORS.accent,
     flexDirection: "row",
     alignItems: "center",
   },
   noticeIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 17,
-    backgroundColor: "#FFFBEB",
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLORS.accentTint,
+    borderWidth: 1.5,
+    borderColor: COLORS.accent,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -340,12 +378,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   noticeTitle: {
-    color: "#92400E",
-    fontWeight: "bold",
-    fontSize: 16,
+    color: COLORS.dark,
+    fontWeight: "600",
+    fontSize: 15,
   },
   noticeText: {
-    color: "#92400E",
+    color: COLORS.gray,
     marginTop: 3,
     fontSize: 13,
   },
@@ -353,12 +391,12 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   sectionTitle: {
-    fontSize: 21,
-    fontWeight: "bold",
-    color: "#0F172A",
+    fontSize: 18,
+    fontWeight: "600",
+    color: COLORS.dark,
   },
   sectionSubtitle: {
-    color: "#64748B",
+    color: COLORS.gray,
     marginTop: 3,
     fontSize: 13,
   },
@@ -370,44 +408,44 @@ const styles = StyleSheet.create({
   },
   statCard: {
     width: "48%",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 24,
-    padding: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    padding: 14,
     marginBottom: 13,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.border,
   },
   statIconBox: {
-    width: 46,
-    height: 46,
-    borderRadius: 16,
-    backgroundColor: "#F1F5F9",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1.5,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 11,
   },
   statValue: {
-    fontSize: 27,
-    fontWeight: "bold",
-    color: "#0F172A",
+    fontSize: 22,
+    fontWeight: "600",
+    color: COLORS.dark,
   },
   statLabel: {
-    color: "#64748B",
+    color: COLORS.gray,
     marginTop: 4,
     fontSize: 13,
   },
   simpleButton: {
-    backgroundColor: "#0F172A",
-    borderRadius: 26,
-    padding: 18,
+    backgroundColor: COLORS.dark,
+    borderRadius: 16,
+    padding: 16,
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 12,
   },
   simpleIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 17,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: "rgba(255,255,255,0.14)",
     alignItems: "center",
     justifyContent: "center",
@@ -417,20 +455,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   simpleTitle: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    fontSize: 17,
+    color: COLORS.white,
+    fontWeight: "600",
+    fontSize: 16,
   },
   simpleDesc: {
-    color: "#CBD5E1",
+    color: "rgba(255,255,255,0.75)",
     marginTop: 3,
     fontSize: 12,
     lineHeight: 17,
   },
   resetButton: {
-    backgroundColor: "#64748B",
-    padding: 15,
-    borderRadius: 18,
+    backgroundColor: COLORS.gray,
+    padding: 14,
+    borderRadius: 14,
     marginTop: 4,
     marginBottom: 20,
     flexDirection: "row",
@@ -439,13 +477,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   resetText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     textAlign: "center",
-    fontWeight: "bold",
-  },
-  statValue: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#0F172A",
+    fontWeight: "600",
   },
 });

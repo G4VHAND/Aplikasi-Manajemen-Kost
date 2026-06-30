@@ -140,7 +140,7 @@ export default function PembayaranAdmin() {
         <View style={styles.container}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.backIcon} onPress={handleBack}>
-              <ArrowLeft size={22} color="#0F172A" />
+              <ArrowLeft size={22} color="#1B2A47" />
             </TouchableOpacity>
 
             <View style={styles.headerText}>
@@ -173,7 +173,7 @@ export default function PembayaranAdmin() {
                 style={styles.selectBox}
                 onPress={() => setRoomModal(true)}
               >
-                <DoorOpen size={19} color="#64748B" />
+                <DoorOpen size={19} color="#6B7A94" />
                 <Text style={styles.selectText}>
                   {selectedRoom
                     ? `Kamar ${selectedRoom.nomor}`
@@ -197,7 +197,7 @@ export default function PembayaranAdmin() {
                 style={styles.selectBox}
                 onPress={() => setMonthModal(true)}
               >
-                <Calendar size={19} color="#64748B" />
+                <Calendar size={19} color="#6B7A94" />
                 <Text style={styles.selectText}>
                   {bulanDipilih || "Pilih bulan"}
                 </Text>
@@ -207,7 +207,7 @@ export default function PembayaranAdmin() {
                 style={styles.selectBox}
                 onPress={() => setYearModal(true)}
               >
-                <Calendar size={19} color="#64748B" />
+                <Calendar size={19} color="#6B7A94" />
                 <Text style={styles.selectText}>
                   {tahunDipilih || "Pilih tahun"}
                 </Text>
@@ -242,7 +242,7 @@ export default function PembayaranAdmin() {
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={
               <View style={styles.emptyBox}>
-                <CreditCard size={42} color="#94A3B8" />
+                <CreditCard size={42} color="#9AACC9" />
                 <Text style={styles.emptyTitle}>Belum ada pembayaran</Text>
                 <Text style={styles.empty}>
                   Data tagihan pembayaran akan tampil di sini.
@@ -358,7 +358,7 @@ export default function PembayaranAdmin() {
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Pilih Kamar</Text>
                 <TouchableOpacity onPress={() => setRoomModal(false)}>
-                  <X size={22} color="#0F172A" />
+                  <X size={22} color="#1B2A47" />
                 </TouchableOpacity>
               </View>
 
@@ -399,7 +399,7 @@ export default function PembayaranAdmin() {
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Pilih Bulan</Text>
                 <TouchableOpacity onPress={() => setMonthModal(false)}>
-                  <X size={22} color="#0F172A" />
+                  <X size={22} color="#1B2A47" />
                 </TouchableOpacity>
               </View>
 
@@ -428,7 +428,7 @@ export default function PembayaranAdmin() {
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Pilih Tahun</Text>
                 <TouchableOpacity onPress={() => setYearModal(false)}>
-                  <X size={22} color="#0F172A" />
+                  <X size={22} color="#1B2A47" />
                 </TouchableOpacity>
               </View>
 
@@ -456,7 +456,7 @@ export default function PembayaranAdmin() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: "#F8FAFC" },
+  wrapper: { flex: 1, backgroundColor: "#EAF2FE" },
   container: { flex: 1, padding: 24 },
   header: {
     marginTop: 45,
@@ -470,7 +470,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -480,68 +480,68 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 16,
-    backgroundColor: "#F1F5F9",
+    backgroundColor: "#EAF2FE",
     alignItems: "center",
     justifyContent: "center",
   },
-  title: { fontSize: 26, fontWeight: "bold", color: "#0F172A" },
-  subtitle: { color: "#64748B", marginTop: 3, fontSize: 13 },
+  title: { fontSize: 26, fontWeight: "bold", color: "#1B2A47" },
+  subtitle: { color: "#6B7A94", marginTop: 3, fontSize: 13 },
   formCard: {
     backgroundColor: "#FFFFFF",
     borderRadius: 24,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     marginBottom: 16,
   },
   formTitle: {
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 12,
     fontSize: 16,
   },
   selectBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: "#C7D7F5",
     marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
   },
-  selectText: { color: "#0F172A", flex: 1 },
+  selectText: { color: "#1B2A47", flex: 1 },
   input: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 13,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: "#C7D7F5",
     marginBottom: 10,
   },
   previewBox: {
-    backgroundColor: "#EFF6FF",
+    backgroundColor: "#E6F0FE",
     padding: 12,
     borderRadius: 14,
     marginBottom: 10,
   },
-  previewText: { color: "#1E40AF", fontWeight: "600", marginBottom: 3 },
+  previewText: { color: "#3A78E0", fontWeight: "600", marginBottom: 3 },
   totalBox: {
-    backgroundColor: "#F1F5F9",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 16,
     marginBottom: 12,
   },
-  totalLabel: { color: "#64748B", fontSize: 13 },
+  totalLabel: { color: "#6B7A94", fontSize: 13 },
   totalValue: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginTop: 4,
   },
   addButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: "#4F8EF7",
     padding: 14,
     borderRadius: 14,
     flexDirection: "row",
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   paymentHeader: {
     flexDirection: "row",
@@ -567,59 +567,59 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 18,
-    backgroundColor: "#F1F5F9",
+    backgroundColor: "#EAF2FE",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
   },
   paymentInfo: { flex: 1 },
-  name: { fontWeight: "bold", fontSize: 18, color: "#0F172A" },
-  month: { color: "#64748B", marginTop: 4 },
+  name: { fontWeight: "bold", fontSize: 18, color: "#1B2A47" },
+  month: { color: "#6B7A94", marginTop: 4 },
   badge: {
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 999,
   },
   badgePaid: { backgroundColor: "#DCFCE7" },
-  badgeVerify: { backgroundColor: "#DBEAFE" },
+  badgeVerify: { backgroundColor: "#E6F0FE" },
   badgeLess: { backgroundColor: "#FEE2E2" },
   badgeUnpaid: { backgroundColor: "#FEF3C7" },
   badgeText: { fontSize: 12, fontWeight: "bold" },
   badgeTextPaid: { color: "#16A34A" },
-  badgeTextVerify: { color: "#2563EB" },
+  badgeTextVerify: { color: "#4F8EF7" },
   badgeTextLess: { color: "#DC2626" },
   badgeTextUnpaid: { color: "#D97706" },
   amountBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 18,
     marginBottom: 12,
   },
-  amountLabel: { color: "#64748B", fontSize: 13 },
+  amountLabel: { color: "#6B7A94", fontSize: 13 },
   amountValue: {
-    color: "#0F172A",
+    color: "#1B2A47",
     fontSize: 22,
     fontWeight: "bold",
     marginTop: 4,
     marginBottom: 8,
   },
-  detailText: { color: "#64748B", marginTop: 4 },
+  detailText: { color: "#6B7A94", marginTop: 4 },
   proofBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 12,
     borderRadius: 16,
     marginBottom: 12,
   },
   proofTitle: {
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 8,
   },
   proofImage: {
     width: "100%",
     height: 190,
     borderRadius: 14,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: "#D9E5FA",
   },
   lunasButton: {
     backgroundColor: "#16A34A",
@@ -646,17 +646,17 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 30,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     marginTop: 20,
   },
   emptyTitle: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginTop: 12,
   },
-  empty: { textAlign: "center", marginTop: 6, color: "#64748B" },
+  empty: { textAlign: "center", marginTop: 6, color: "#6B7A94" },
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(15,23,42,0.35)",
@@ -678,27 +678,27 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   optionItem: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 16,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   optionTitle: {
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     fontSize: 16,
   },
   optionText: {
-    color: "#64748B",
+    color: "#6B7A94",
     marginTop: 3,
   },
   toggleFormButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: "#4F8EF7",
     padding: 14,
     borderRadius: 16,
     marginBottom: 14,

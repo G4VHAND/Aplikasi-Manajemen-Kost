@@ -154,7 +154,7 @@ export default function UserDashboard() {
           <View style={styles.grid}>
             <StatCard
               Icon={CreditCard}
-              color="#2563EB"
+              color="#4F8EF7"
               value={tagihanAktif}
               label="Tagihan Aktif"
             />
@@ -230,7 +230,7 @@ function StatCard({ Icon, color, value, label }) {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
   },
   container: {
     flex: 1,
@@ -247,13 +247,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   greeting: {
-    color: "#64748B",
+    color: "#6B7A94",
     fontSize: 15,
   },
   title: {
     fontSize: 29,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginTop: 4,
   },
   avatar: {
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 21,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 14,
   },
   grid: {
@@ -381,14 +381,14 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     marginBottom: 13,
   },
   statIconBox: {
     width: 46,
     height: 46,
     borderRadius: 16,
-    backgroundColor: "#F1F5F9",
+    backgroundColor: "#EAF2FE",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 11,
@@ -396,10 +396,10 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   statLabel: {
-    color: "#64748B",
+    color: "#6B7A94",
     marginTop: 4,
     fontSize: 13,
   },
@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     marginBottom: 18,
   },
   announcementHeader: {
@@ -430,11 +430,11 @@ const styles = StyleSheet.create({
   announcementTitle: {
     fontWeight: "bold",
     fontSize: 16,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 6,
   },
   announcementText: {
-    color: "#64748B",
+    color: "#6B7A94",
     lineHeight: 20,
   },
   logoutButton: {

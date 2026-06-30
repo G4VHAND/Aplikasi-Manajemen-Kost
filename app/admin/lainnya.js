@@ -73,7 +73,7 @@ function MenuCard({ Icon, title, desc, color, onPress }) {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
   },
   container: {
     flex: 1,
@@ -83,10 +83,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   subtitle: {
-    color: "#64748B",
+    color: "#6B7A94",
     marginTop: 4,
     marginBottom: 22,
   },
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 14,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 18,
-    backgroundColor: "#F1F5F9",
+    backgroundColor: "#EAF2FE",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
@@ -115,16 +115,16 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontWeight: "bold",
     fontSize: 16,
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   cardDesc: {
-    color: "#64748B",
+    color: "#6B7A94",
     fontSize: 13,
     marginTop: 4,
   },
   arrow: {
     fontSize: 30,
-    color: "#94A3B8",
+    color: "#9AACC9",
   },
   logoutButton: {
     backgroundColor: "#EF4444",

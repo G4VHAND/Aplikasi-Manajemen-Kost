@@ -179,7 +179,7 @@ export default function DataPenghuni() {
         <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.backIcon} onPress={handleBack}>
-            <ArrowLeft size={22} color="#0F172A" />
+            <ArrowLeft size={22} color="#1B2A47" />
           </TouchableOpacity>
 
           <View style={styles.headerText}>
@@ -197,12 +197,12 @@ export default function DataPenghuni() {
           </View>
 
           <View style={styles.headerIcon}>
-            <Users size={24} color="#2563EB" />
+            <Users size={24} color="#4F8EF7" />
           </View>
         </View>
 
           <View style={styles.searchBox}>
-          <Search size={19} color="#64748B" />
+          <Search size={19} color="#6B7A94" />
           <TextInput
             style={styles.searchInput}
             placeholder="Cari nama, email, kamar, atau status..."
@@ -218,7 +218,7 @@ export default function DataPenghuni() {
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={
               <View style={styles.emptyBox}>
-                <Users size={42} color="#94A3B8" />
+                <Users size={42} color="#9AACC9" />
                 <Text style={styles.emptyTitle}>Belum ada penghuni</Text>
                 <Text style={styles.empty}>
                   Data penghuni yang registrasi akan tampil di sini.
@@ -299,7 +299,7 @@ export default function DataPenghuni() {
                         setModalKamar(true);
                       }}
                     >
-                      <DoorOpen size={19} color="#64748B" />
+                      <DoorOpen size={19} color="#6B7A94" />
                       <Text style={styles.selectText}>
                         {editKamar ? `Kamar ${editKamar}` : "Pilih kamar"}
                       </Text>
@@ -348,7 +348,7 @@ export default function DataPenghuni() {
                       style={styles.selectBox}
                       onPress={() => bukaModalKamar(item.id)}
                     >
-                      <DoorOpen size={19} color="#64748B" />
+                      <DoorOpen size={19} color="#6B7A94" />
                       <Text style={styles.selectText}>
                         {kamarDipilih[item.id]
                           ? `Kamar ${kamarDipilih[item.id]}`
@@ -379,7 +379,7 @@ export default function DataPenghuni() {
                 <Text style={styles.modalTitle}>Pilih Kamar Kosong</Text>
 
                 <TouchableOpacity onPress={() => setModalKamar(false)}>
-                  <X size={22} color="#0F172A" />
+                  <X size={22} color="#1B2A47" />
                 </TouchableOpacity>
               </View>
 
@@ -414,14 +414,14 @@ export default function DataPenghuni() {
 function InfoRow({ Icon, label }) {
   return (
     <View style={styles.infoRow}>
-      <Icon size={17} color="#64748B" />
+      <Icon size={17} color="#6B7A94" />
       <Text style={styles.infoText}>{label}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: "#F8FAFC" },
+  wrapper: { flex: 1, backgroundColor: "#EAF2FE" },
   container: { flex: 1, padding: 24 },
   header: {
     marginTop: 45,
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -445,12 +445,12 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 16,
-    backgroundColor: "#DBEAFE",
+    backgroundColor: "#E6F0FE",
     alignItems: "center",
     justifyContent: "center",
   },
-  title: { fontSize: 26, fontWeight: "bold", color: "#0F172A" },
-  subtitle: { color: "#64748B", marginTop: 3, fontSize: 13 },
+  title: { fontSize: 26, fontWeight: "bold", color: "#1B2A47" },
+  subtitle: { color: "#6B7A94", marginTop: 3, fontSize: 13 },
   listContent: { paddingBottom: 30 },
   card: {
     backgroundColor: "#FFFFFF",
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   profileRow: {
     flexDirection: "row",
@@ -469,14 +469,14 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 24,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: "#D9E5FA",
     marginRight: 14,
   },
   profileInfo: { flex: 1 },
   name: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 8,
   },
   badge: {
@@ -491,7 +491,7 @@ const styles = StyleSheet.create({
   badgeTextActive: { color: "#16A34A" },
   badgeTextPending: { color: "#D97706" },
   infoBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     borderRadius: 18,
     padding: 12,
     marginBottom: 12,
@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     marginLeft: 10,
-    color: "#334155",
+    color: "#28395A",
     flex: 1,
   },
   actionRow: {
@@ -512,7 +512,7 @@ const styles = StyleSheet.create({
   },
   editButton: {
     flex: 1,
-    backgroundColor: "#2563EB",
+    backgroundColor: "#4F8EF7",
     padding: 13,
     borderRadius: 14,
     flexDirection: "row",
@@ -531,20 +531,20 @@ const styles = StyleSheet.create({
     gap: 7,
   },
   editBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 18,
     marginTop: 4,
   },
   confirmBox: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 18,
     marginTop: 12,
   },
   formTitle: {
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 10,
   },
   input: {
@@ -552,7 +552,7 @@ const styles = StyleSheet.create({
     padding: 13,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: "#C7D7F5",
     marginBottom: 10,
   },
   selectBox: {
@@ -560,14 +560,14 @@ const styles = StyleSheet.create({
     padding: 13,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: "#C7D7F5",
     marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
   },
   selectText: {
-    color: "#0F172A",
+    color: "#1B2A47",
     flex: 1,
   },
   saveButton: {
@@ -581,7 +581,7 @@ const styles = StyleSheet.create({
     gap: 7,
   },
   cancelButton: {
-    backgroundColor: "#64748B",
+    backgroundColor: "#6B7A94",
     padding: 13,
     borderRadius: 14,
     marginTop: 10,
@@ -605,20 +605,20 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 30,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     marginTop: 30,
   },
   emptyTitle: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#0F172A",
+    color: "#1B2A47",
     marginTop: 12,
   },
   empty: {
     textAlign: "center",
     marginTop: 6,
-    color: "#64748B",
+    color: "#6B7A94",
   },
   modalOverlay: {
     flex: 1,
@@ -641,30 +641,30 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   optionItem: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     padding: 14,
     borderRadius: 16,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   optionTitle: {
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     fontSize: 16,
   },
   optionText: {
-    color: "#64748B",
+    color: "#6B7A94",
     marginTop: 3,
   },
   searchBox: {
     backgroundColor: "#FFFFFF",
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     paddingHorizontal: 14,
     marginBottom: 14,
     flexDirection: "row",
@@ -674,10 +674,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 13,
     marginLeft: 10,
-    color: "#0F172A",
+    color: "#1B2A47",
   },
 historyButton: {
-  backgroundColor: "#2563EB",
+  backgroundColor: "#4F8EF7",
   paddingHorizontal: 12,
   paddingVertical: 8,
   borderRadius: 10,

@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
+import { COLORS } from "../constants/theme";
 
 export default function AppHeader({ title, subtitle }) {
   return (
@@ -15,13 +16,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#0F172A",
+    fontSize: 28,
+    fontWeight: "600",
+    color: COLORS.dark,
   },
   subtitle: {
-    color: "#64748B",
+    color: COLORS.gray,
     marginTop: 4,
-    fontSize: 15,
+    fontSize: 14,
   },
 });

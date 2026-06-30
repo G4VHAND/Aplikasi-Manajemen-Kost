@@ -90,12 +90,12 @@ export default function RegisterScreen() {
           style={styles.backButton}
           onPress={() => router.replace("/login")}
         >
-          <ArrowLeft size={20} color="#0F172A" />
+          <ArrowLeft size={20} color="#1B2A47" />
         </TouchableOpacity>
 
         <View style={styles.hero}>
           <View style={styles.logoBox}>
-            <Home size={34} color="#2563EB" />
+            <Home size={34} color="#4F8EF7" />
           </View>
 
           <Text style={styles.title}>Daftar Penghuni</Text>
@@ -110,7 +110,7 @@ export default function RegisterScreen() {
               <Image source={{ uri: foto }} style={styles.photo} />
             ) : (
               <View style={styles.photoPlaceholder}>
-                <Camera size={30} color="#2563EB" />
+                <Camera size={30} color="#4F8EF7" />
                 <Text style={styles.photoText}>Pilih Foto</Text>
               </View>
             )}
@@ -182,10 +182,10 @@ function InputField({ Icon, label, ...props }) {
     <View>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.inputWrapper}>
-        <Icon size={19} color="#64748B" />
+        <Icon size={19} color="#6B7A94" />
         <TextInput
           style={styles.input}
-          placeholderTextColor="#94A3B8"
+          placeholderTextColor="#9AACC9"
           {...props}
         />
       </View>
@@ -196,7 +196,7 @@ function InputField({ Icon, label, ...props }) {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
   },
   container: {
     padding: 24,
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 18,
@@ -222,21 +222,21 @@ const styles = StyleSheet.create({
     width: 76,
     height: 76,
     borderRadius: 24,
-    backgroundColor: "#DBEAFE",
+    backgroundColor: "#E6F0FE",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#BFDBFE",
+    borderColor: "#8AB4FB",
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#0F172A",
+    color: "#1B2A47",
     textAlign: "center",
   },
   subtitle: {
-    color: "#64748B",
+    color: "#6B7A94",
     textAlign: "center",
     marginTop: 8,
     lineHeight: 20,
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     padding: 22,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: "#D9E5FA",
   },
   photoBox: {
     alignSelf: "center",
@@ -257,34 +257,34 @@ const styles = StyleSheet.create({
     width: 116,
     height: 116,
     borderRadius: 38,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: "#D9E5FA",
   },
   photoPlaceholder: {
     width: 116,
     height: 116,
     borderRadius: 38,
-    backgroundColor: "#DBEAFE",
+    backgroundColor: "#E6F0FE",
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: "#BFDBFE",
+    borderColor: "#8AB4FB",
   },
   photoText: {
-    color: "#2563EB",
+    color: "#4F8EF7",
     fontWeight: "800",
     marginTop: 6,
     fontSize: 13,
   },
   label: {
     fontWeight: "700",
-    color: "#0F172A",
+    color: "#1B2A47",
     marginBottom: 7,
   },
   inputWrapper: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#EAF2FE",
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: "#C7D7F5",
     marginBottom: 15,
     paddingHorizontal: 14,
     flexDirection: "row",
@@ -294,10 +294,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 15,
     marginLeft: 10,
-    color: "#0F172A",
+    color: "#1B2A47",
   },
   button: {
-    backgroundColor: "#2563EB",
+    backgroundColor: "#4F8EF7",
     padding: 16,
     borderRadius: 18,
     marginTop: 6,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     textAlign: "center",
-    color: "#2563EB",
+    color: "#4F8EF7",
     fontWeight: "800",
   },
 });

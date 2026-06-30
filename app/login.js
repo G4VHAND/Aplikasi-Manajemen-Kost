@@ -1,7 +1,6 @@
 import { router } from "expo-router";
 import { useState } from "react";
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -22,6 +21,8 @@ import {
 } from "lucide-react-native";
 
 import { useApp } from "../context/AppContext";
+import { showAlert } from "../utils/showAlert";
+import { COLORS } from "../constants/theme";
 
 export default function LoginScreen() {
   const { login } = useApp();
@@ -33,7 +34,7 @@ export default function LoginScreen() {
     const result = await login("admin", email, password);
 
     if (!result.success) {
-      Alert.alert("Login Gagal", result.message);
+      showAlert("Login Gagal", result.message);
       return;
     }
 
@@ -44,7 +45,7 @@ export default function LoginScreen() {
     const result = await login("user", email, password);
 
     if (!result.success) {
-      Alert.alert("Login Gagal", result.message);
+      showAlert("Login Gagal", result.message);
       return;
     }
 
@@ -62,7 +63,7 @@ export default function LoginScreen() {
       >
         <View style={styles.hero}>
           <View style={styles.logoBox}>
-            <Building2 size={40} color="#2563EB" />
+            <Building2 size={36} color={COLORS.primaryDark} />
           </View>
 
           <Text style={styles.title}>KostKu</Text>
@@ -81,7 +82,7 @@ export default function LoginScreen() {
 
           <Text style={styles.label}>Email</Text>
           <View style={styles.inputWrapper}>
-            <Mail size={19} color="#64748B" />
+            <Mail size={19} color={COLORS.gray} />
             <TextInput
               style={styles.input}
               placeholder="Masukkan email"
@@ -95,7 +96,7 @@ export default function LoginScreen() {
 
           <Text style={styles.label}>Password</Text>
           <View style={styles.inputWrapper}>
-            <Lock size={19} color="#64748B" />
+            <Lock size={19} color={COLORS.gray} />
             <TextInput
               style={styles.input}
               placeholder="Masukkan password"
@@ -121,7 +122,7 @@ export default function LoginScreen() {
           style={styles.registerButton}
           onPress={() => router.push("/register")}
         >
-          <UserPlus size={18} color="#2563EB" />
+          <UserPlus size={18} color={COLORS.primaryDark} />
           <Text style={styles.registerText}>Daftar Penghuni Baru</Text>
         </TouchableOpacity>
 
@@ -137,7 +138,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.background,
   },
   container: {
     flexGrow: 1,
@@ -149,58 +150,58 @@ const styles = StyleSheet.create({
     marginBottom: 26,
   },
   logoBox: {
-    width: 88,
-    height: 88,
-    borderRadius: 28,
-    backgroundColor: "#DBEAFE",
+    width: 80,
+    height: 80,
+    borderRadius: 24,
+    backgroundColor: COLORS.white,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#BFDBFE",
+    borderWidth: 1.5,
+    borderColor: COLORS.primaryLight,
   },
   title: {
-    fontSize: 40,
-    fontWeight: "bold",
-    color: "#0F172A",
+    fontSize: 34,
+    fontWeight: "600",
+    color: COLORS.dark,
   },
   subtitle: {
-    color: "#64748B",
+    color: COLORS.gray,
     textAlign: "center",
     marginTop: 8,
     lineHeight: 20,
     paddingHorizontal: 12,
   },
   card: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 28,
+    backgroundColor: COLORS.white,
+    borderRadius: 20,
     padding: 22,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.border,
   },
   cardHeader: {
     marginBottom: 20,
   },
   cardTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#0F172A",
+    fontSize: 22,
+    fontWeight: "600",
+    color: COLORS.dark,
   },
   cardSubtitle: {
-    color: "#64748B",
+    color: COLORS.gray,
     marginTop: 5,
     lineHeight: 20,
   },
   label: {
-    fontWeight: "700",
-    color: "#0F172A",
+    fontWeight: "600",
+    color: COLORS.dark,
     marginBottom: 7,
   },
   inputWrapper: {
-    backgroundColor: "#F8FAFC",
-    borderRadius: 16,
+    backgroundColor: COLORS.background,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: COLORS.border,
     marginBottom: 15,
     paddingHorizontal: 14,
     flexDirection: "row",
@@ -210,12 +211,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 15,
     marginLeft: 10,
-    color: "#0F172A",
+    color: COLORS.dark,
   },
   adminButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: COLORS.primary,
     padding: 16,
-    borderRadius: 18,
+    borderRadius: 14,
     marginTop: 6,
     flexDirection: "row",
     alignItems: "center",
@@ -223,9 +224,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   userButton: {
-    backgroundColor: "#16A34A",
+    backgroundColor: COLORS.accentDark,
     padding: 16,
-    borderRadius: 18,
+    borderRadius: 14,
     marginTop: 12,
     flexDirection: "row",
     alignItems: "center",
@@ -233,9 +234,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     textAlign: "center",
-    fontWeight: "bold",
+    fontWeight: "600",
     fontSize: 15,
   },
   registerButton: {
@@ -246,26 +247,26 @@ const styles = StyleSheet.create({
     gap: 7,
   },
   registerText: {
-    color: "#2563EB",
-    fontWeight: "800",
+    color: COLORS.primaryDark,
+    fontWeight: "700",
   },
   demoBox: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
     padding: 14,
     marginTop: 18,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.border,
     alignItems: "center",
   },
   demoTitle: {
-    color: "#64748B",
+    color: COLORS.gray,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "600",
   },
   demoText: {
-    color: "#0F172A",
-    fontWeight: "bold",
+    color: COLORS.dark,
+    fontWeight: "600",
     marginTop: 4,
   },
 });
